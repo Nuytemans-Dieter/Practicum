@@ -105,7 +105,8 @@ def depthFirstSearch(problem):
     return visited
 
 def nextDFS(problem, node, visited):
-    visited.push(node[2])
+    visited.push(node)
+    print(node)
 
     for successor, direction, length in problem.getSuccessors(node):
         if not(successor in visited.list):
