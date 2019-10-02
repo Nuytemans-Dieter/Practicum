@@ -102,18 +102,13 @@ def depthFirstSearch(problem):
     node = problem.getStartState()
     nextDFS(problem, node, visited)
 
-    for element in visited.list:
-        print("test")
-        print(element)
-
-
-    #return visited
-    util.raiseNotDefined()
-
 def nextDFS(problem, node, visited):
     visited.push(node)
 
-    for successor in problem.getSuccessors(node):
+    for successor, el, el2 in problem.getSuccessors(node):
+        print(successor)
+        print(el)
+        print(el2)
         if not(successor in visited.list):
             nextDFS(problem, successor, visited)
     return visited
