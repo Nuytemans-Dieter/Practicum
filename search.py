@@ -70,7 +70,7 @@ def tinyMazeSearch(problem):
     from game import Directions
     s = Directions.SOUTH
     w = Directions.WEST
-    return  [s, s, w, s, w, w, s, w]
+    return [s, s, w, s, w, w, s, w]
 
 def depthFirstSearch(problem):
     """
@@ -100,18 +100,23 @@ def depthFirstSearch(problem):
 
     visited = util.Stack()
     node = problem.getStartState()
-    nextDFS(problem, node, visited)
 
-    return visited
+    for successor in problem.getSuccessors(node):
+        nextDFS(problem, successor, visited)
+
+    return visited.list
 
 def nextDFS(problem, node, visited):
-    visited.push(node)
+
+    visited.push( node )
+
     print(node)
 
-    for successor, direction, length in problem.getSuccessors(node):
-        if not(successor in visited.list):
-            nextDFS(problem, successor, visited)
-    return visited
+    for location, direction, cost in problem.getSuccessors(node):
+        node = (location, direction, cost)
+        if node not in visited.list:
+            nextDFS(problem, node, visited)
+    return
 
 
 def breadthFirstSearch(problem):
