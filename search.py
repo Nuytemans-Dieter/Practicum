@@ -100,34 +100,39 @@ def depthFirstSearch(problem):
 
     node = problem.getStartState()
 
-    path = util.Stack()
     visited = util.Stack()
 
-    # Execute recursive algorithm for each successor of start
+    # Manually visit the starting node
+    visited.push((node, None)) # Make sure that the start location will be selected by the algorithm (and not just one value of the location)
+
+    # Execute the recursive algorithm for each successor of start
     for successor in problem.getSuccessors(node):
         nextDFS(problem, successor, visited)
 
-    # Return the visited list
-    directions = [dir[1] for dir in visited.list]
-    print(directions)
-    return directions
+    # Create a list of directions from the visited node list
+    directions = [dir[1] for dir in visited.list[1::]] # Take the second element of all tuples (ignoring the starting position as it does not have a direction)
+    print(directions)   # Print all directions
+    return directions   # Return the directions
 
 def nextDFS(problem, node, visited):
 
     # Add the node that's being visited to the list
     visited.push(node)
 
-    if (problem.isGoalState(node[0])):
+    if problem.isGoalState(node[0]):
         return visited
 
     # Iterate over all successors of this node
     for node in problem.getSuccessors(node[0]):
         # Make sure this successor has not been visited yet
         visitedLocations = [location[0] for location in visited.list]
-        if node[0] not in visitedLocations:
-            # Execute the recursive algorithm on each unvisited successor
-            visited = nextDFS(problem, node, visited)
-    return visited
+        if node[0] not in visitedLocations:                         # Check for each successor that they haven't been visited yet
+            done = nextDFS(problem, node, visited)                  # For each unvisited successor: execute the recursive algorithm
+            if done is not None:                                    # If a goal has been reached, just return and don't check other successors
+                return done
+
+    visited.pop()   # Remove the node that should not be visited
+    return None
 
 
 def breadthFirstSearch(problem):
