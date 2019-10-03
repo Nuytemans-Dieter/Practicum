@@ -98,25 +98,33 @@ def depthFirstSearch(problem):
     # Add visited node to 'visited'
     # And visit its adjacent nodes
 
-    visited = util.Stack()
     node = problem.getStartState()
+
+    path = util.Stack()
+    visited = util.Stack()
 
     # Execute recursive algorithm for each successor of start
     for successor in problem.getSuccessors(node):
         nextDFS(problem, successor, visited)
 
     # Return the visited list
-    print(visited)
-    return visited.list
+    directions = [dir[1] for dir in visited.list]
+    print(directions)
+    return directions
 
 def nextDFS(problem, node, visited):
+
     # Add the node that's being visited to the list
-    visited.push(node[1])
+    visited.push(node)
+
+    if (problem.isGoalState(node[0])):
+        return visited
 
     # Iterate over all successors of this node
     for node in problem.getSuccessors(node[0]):
         # Make sure this successor has not been visited yet
-        if node[1] not in visited.list:
+        visitedLocations = [location[0] for location in visited.list]
+        if node[0] not in visitedLocations:
             # Execute the recursive algorithm on each unvisited successor
             visited = nextDFS(problem, node, visited)
     return visited

@@ -6,3 +6,4 @@ idea/
 .idea/Sessie 1.iml
 .idea/vcs.xml
 .idea/workspace.xml
+__pycache__/search.cpython-37.pyc
