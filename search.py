@@ -137,8 +137,29 @@ def nextDFS(problem, node, visited):
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    done = None
+    node = problem.getStartState()
+    print(problem.getSuccessors(node))
+    queue = []
+    visited = util.Stack()
+
+    queue.append(node)
+    visited.push((node, None))
+
+    while queue or done:
+        node = queue.pop(0)
+        print(node)
+        if problem.isGoalState(node):
+            done = True
+        for successor in problem.getSuccessors(node):
+            visitedLocations = [location[0] for location in visited.list]
+            if node[0] not in visitedLocations:
+                queue.append(successor)
+                visited.push(successor)
+
+    directions = [dir[1] for dir in visited.list[1::]]
+    print(directions)
+    return directions
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
