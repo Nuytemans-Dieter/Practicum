@@ -139,23 +139,21 @@ def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     done = None
     node = problem.getStartState()
-    print(problem.getSuccessors(node))
     queue = []
     visited = util.Stack()
 
     queue.append(node)
-    visited.push((node, None))
 
-    while queue or done:
+    while queue or not done:
         node = queue.pop(0)
-        print(node)
         if problem.isGoalState(node):
             done = True
+        else:
+            visited.push((node, None))
         for successor in problem.getSuccessors(node):
             visitedLocations = [location[0] for location in visited.list]
-            if node[0] not in visitedLocations:
+            if node not in visitedLocations:
                 queue.append(successor)
-                visited.push(successor)
 
     directions = [dir[1] for dir in visited.list[1::]]
     print(directions)
