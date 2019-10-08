@@ -175,8 +175,9 @@ class PriorityQueue:
       data structure allows O(1) access to the lowest-priority item.
     """
     def  __init__(self):
-        self.heap = []
-        self.count = 0
+        self.heap = []  #Heap data structure is mainly used to represent a priority queue.
+        self.count = 0  #The property of this data structure in python is that each time the smallest of heap element is popped(min heap)
+                        #count() method counts how many times an element has occurred in a list and returns it.
 
     def push(self, item, priority):
         entry = (priority, self.count, item)
