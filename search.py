@@ -101,19 +101,24 @@ def depthFirstSearch(problem):
     node = problem.getStartState()
 
     visited = util.Stack()
+    path = util.Stack()
 
     # Manually visit the starting node
     visited.push((node, None)) # Make sure that the start location will be selected by the algorithm (and not just one value of the location)
 
+
+
     # Execute the recursive algorithm for each successor of start
     for successor in problem.getSuccessors(node):
-        nextDFS(problem, successor, visited)
+        recDFS(problem, successor, visited, path)
 
     # Create a list of directions from the visited node list
-    directions = [dir[1] for dir in visited.list[1::]] # Take the second element of all tuples (ignoring the starting position as it does not have a direction)
-    print(directions)   # Print all directions
-    return directions   # Return the directions
+    #directions = [dir[1] for dir in visited.list[1::]] # Take the second element of all tuples (ignoring the starting position as it does not have a direction)
+    print(path.list)   # Print all directions
+    return path.list   # Return the directions
 
+"""
+# This method is incorrect and should not be used
 def nextDFS(problem, node, visited):
 
     # Add the node that's being visited to the list
@@ -131,7 +136,32 @@ def nextDFS(problem, node, visited):
             if done is not None:                                    # If a goal has been reached, just return and don't check other successors
                 return done
 
+
     visited.pop()   # Remove the node that should not be visited
+    return None
+"""
+
+def recDFS(problem, node, visited, path):
+    #print("Performing node: ", node[0])
+    visited.push(node[0])
+
+    if problem.isGoalState(node[0]):
+        path.push(node[1])
+        return path
+
+    for successor in problem.getSuccessors(node[0]):
+        visitedLocations = [location for location in visited.list]
+        if successor[0] not in visitedLocations:
+        #    print("Node ", node[0], " is not visited")
+            path.push(node[1])
+            a = recDFS(problem, successor, visited, path)
+            if a:
+       #         print("Return a: ", a)
+                return a
+        else:
+            print("Node ", node[0], " has been visited")
+    #print("Node: ", node[0], " Returns none")
+
     return None
 
 
