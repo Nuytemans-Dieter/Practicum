@@ -104,65 +104,31 @@ def depthFirstSearch(problem):
     path = util.Stack()
 
     # Manually visit the starting node
-    visited.push((node, None)) # Make sure that the start location will be selected by the algorithm (and not just one value of the location)
+    #visited.push((node, None)) # Make sure that the start location will be selected by the algorithm (and not just one value of the location)
 
 
 
     # Execute the recursive algorithm for each successor of start
-    for successor in problem.getSuccessors(node):
-        recDFS(problem, successor, visited, path)
+    order = doDFS(problem, (node, None))
+    #for successor in problem.getSuccessors(node):
+    #    order = doDFS(problem, successor, visited)
 
     # Create a list of directions from the visited node list
     #directions = [dir[1] for dir in visited.list[1::]] # Take the second element of all tuples (ignoring the starting position as it does not have a direction)
-    print(path.list)   # Print all directions
-    return path.list   # Return the directions
+    #print(directions)   # Print all directions
+    #return directions.list   # Return the directions
+    print(order.list)
+    return ["South", "North"]
 
-"""
-# This method is incorrect and should not be used
-def nextDFS(problem, node, visited):
-
-    # Add the node that's being visited to the list
-    visited.push(node)
-
-    if problem.isGoalState(node[0]):
-        return visited
-
-    # Iterate over all successors of this node
-    for node in problem.getSuccessors(node[0]):
-        # Make sure this successor has not been visited yet
-        visitedLocations = [location[0] for location in visited.list]
-        if node[0] not in visitedLocations:                         # Check for each successor that they haven't been visited yet
-            done = nextDFS(problem, node, visited)                  # For each unvisited successor: execute the recursive algorithm
-            if done is not None:                                    # If a goal has been reached, just return and don't check other successors
-                return done
-
-
-    visited.pop()   # Remove the node that should not be visited
-    return None
-"""
-
-def recDFS(problem, node, visited, path):
-    #print("Performing node: ", node[0])
+def doDFS(problem, node, visited=None, path=None):
+    if visited is None:
+        visited = util.Stack()
     visited.push(node[0])
-
-    if problem.isGoalState(node[0]):
-        path.push(node[1])
-        return path
-
     for successor in problem.getSuccessors(node[0]):
-        visitedLocations = [location for location in visited.list]
-        if successor[0] not in visitedLocations:
-        #    print("Node ", node[0], " is not visited")
-            path.push(node[1])
-            a = recDFS(problem, successor, visited, path)
-            if a:
-       #         print("Return a: ", a)
-                return a
-        else:
-            print("Node ", node[0], " has been visited")
-    #print("Node: ", node[0], " Returns none")
-
-    return None
+        #visitedLocations = [location[0] for location in visited.list]
+        if successor[0] not in visited.list:
+            doDFS(problem, successor, visited)
+        return visited
 
 
 def breadthFirstSearch(problem):
