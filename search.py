@@ -107,18 +107,17 @@ def doDFS(problem, node, visited, path):
     #       successor[0] gives (xLoc, yLox)
     #       successor[1] gives Direction
 
-    visited.push(node[0])                                                   # Put the visited location to the visited list so that it won't be visited again
-    visited.push(node[0])
+    visited.push( node[0] )                                                 # Put the visited location to the visited list so that it won't be visited again
 
     if problem.getStartState() is not node[0]:                              # Add the move to the 'moves' list unless it is the first node (no move is required in that case!)
-        path.push(node[1])
+        path.push( node[1] )
 
-    if problem.isGoalState(node[0]):                                        # Return if the goal has been reached
+    if problem.isGoalState( node[0] ):                                      # Return if the goal has been reached
         return True
 
-    for successor in problem.getSuccessors(node[0]):                        # Loop through all possible successors
+    for successor in problem.getSuccessors( node[0] ):                      # Loop through all possible successors
         if successor[0] not in visited.list:                                # Check if this successor has not been visited before
-            isGoalFound = doDFS(problem, successor, visited, path)          # Execute recursive DFS on each 'unvisited' successor
+            isGoalFound = doDFS( problem, successor, visited, path )        # Execute recursive DFS on each 'unvisited' successor
             if isGoalFound:
                 return True                                                 # Return true when the path was found
             else:
@@ -164,8 +163,29 @@ def nullHeuristic(state, problem=None):
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    visited = util.Stack()                          # Keep track of visited nodes
+    toDo = util.PriorityQueue()                     # A queue of the next nodes to be visited
+
+    toDo.push((problem.getStartState(), []), 0)     # Start by adding the starting node to the to-do queue
+    costs = {problem.getStartState(): 0}            # A dictionary (±map) that keeps track of the lowest possible cost of considered nodes
+                                                    # The cost to the starting position is obviously always 0
+
+    while True:                                     # Keep running until a return
+        if toDo.isEmpty():                          # Stop if there are no nodes left to check
+            return []
+
+        node, directions = toDo.pop()         # Take the top contents of the to-do queue
+
+        if problem.isGoalState(node):         # Return the path if the goal has been reached
+            return directions
+
+        if node not in visited.list:                                        # Make sure the node hasn't been visited
+            visited.push(node)                                              # Visit this node, add it to visited
+            for successor, direction, cost in problem.getSuccessors(node):  # Loop all next possible options for this node
+                heur = heuristic( successor, problem )                      # Calculate the heuristic of the underlying successor
+                costs[ successor ] = costs[ node ] + cost                   # Update the cost of this node
+                toDo.push(( successor, directions + [ direction ] ), costs[ successor ] + heur )  # Modify the to-do list for the next loop execution(s)
 
 
 # Abbreviations
