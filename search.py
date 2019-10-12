@@ -97,38 +97,40 @@ def depthFirstSearch(problem):
     # Visit adjacent nodes that are not in 'visited'
     # Add visited node to 'visited'
     # And visit its adjacent nodes
+    # + include a way to track a path to the goal
 
-    node = problem.getStartState()
-
+    directions = util.Stack()
     visited = util.Stack()
-    path = util.Stack()
+    doDFS(problem, (problem.getStartState(), []), visited, directions)
+    print(directions.list)
+    return directions.list
 
-    # Manually visit the starting node
-    #visited.push((node, None)) # Make sure that the start location will be selected by the algorithm (and not just one value of the location)
+def doDFS(problem, node, visited, path):
+    #if visited is None:
+    #    visited = util.Stack()
+    print("Visiting node ", node[0])
+    visited.push(node[0])                                                   # Put the visited location to the visited list
+    if problem.getStartState() is not node[0]:
+        path.push(node[1])
 
+    if problem.isGoalState(node[0]):                                        # Return if the goal has been reached
+        return ("True Found! ", node[0])
+        path.push(node[1])
+        return True
 
-
-    # Execute the recursive algorithm for each successor of start
-    order = doDFS(problem, (node, None))
-    #for successor in problem.getSuccessors(node):
-    #    order = doDFS(problem, successor, visited)
-
-    # Create a list of directions from the visited node list
-    #directions = [dir[1] for dir in visited.list[1::]] # Take the second element of all tuples (ignoring the starting position as it does not have a direction)
-    #print(directions)   # Print all directions
-    #return directions.list   # Return the directions
-    print(order.list)
-    return ["South", "North"]
-
-def doDFS(problem, node, visited=None, path=None):
-    if visited is None:
-        visited = util.Stack()
-    visited.push(node[0])
-    for successor in problem.getSuccessors(node[0]):
+    for successor in problem.getSuccessors(node[0]):                        # Loop through all possible successors
         #visitedLocations = [location[0] for location in visited.list]
-        if successor[0] not in visited.list:
-            doDFS(problem, successor, visited)
-        return visited
+        if successor[0] not in visited.list:                                # Check if this successor has not been visited before
+            isGoalFound = doDFS(problem, successor, visited, path)          # Execute recursive DFS on this successor
+            if isGoalFound:
+                return("True ", node[0])
+                path.push(node[1])
+                return True
+            else:
+                print("No goal!")
+
+    print("False ", node[0])
+    return False                                                             # Completion
 
 
 def breadthFirstSearch(problem):
