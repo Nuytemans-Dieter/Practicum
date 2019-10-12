@@ -86,9 +86,6 @@ def depthFirstSearch(problem):
     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
-    print("Start:", problem.getStartState())
-    print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
-    #print("Start's successors:", problem.getSuccessors(problem.getStartState()))
 
     # Pseudo code:
     # Put current node in 'visited'
@@ -123,13 +120,12 @@ def doDFS(problem, node, visited, path):
         if successor[0] not in visited.list:                                # Check if this successor has not been visited before
             isGoalFound = doDFS(problem, successor, visited, path)          # Execute recursive DFS on each 'unvisited' successor
             if isGoalFound:
-                return("True ", node[0])
-                path.push(node[1])
-                return True
+                path.push(node[1])                                          # If the goal was found, add the direction to the path
+                return True                                                 # Also return True in this case
             else:
-                path.pop()
+                path.pop()                                                  # If the goal hasn't been found yet, pop the top path from the Stack
 
-    return False                                                             # Completion
+    return False                                                            # Return after branch completion
 
 
 def breadthFirstSearch(problem):
