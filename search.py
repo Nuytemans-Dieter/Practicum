@@ -88,7 +88,7 @@ def depthFirstSearch(problem):
     """
     print("Start:", problem.getStartState())
     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
-    print("Start's successors:", problem.getSuccessors(problem.getStartState()))
+    #print("Start's successors:", problem.getSuccessors(problem.getStartState()))
 
     # Pseudo code:
     # Put current node in 'visited'
@@ -111,6 +111,7 @@ def doDFS(problem, node, visited, path):
     #       successor[1] gives Direction
 
     visited.push(node[0])                                                   # Put the visited location to the visited list so that it won't be visited again
+    visited.push(node[0])
 
     if problem.getStartState() is not node[0]:                              # Add the move to the 'moves' list unless it is the first node (no move is required in that case!)
         path.push(node[1])
@@ -119,9 +120,8 @@ def doDFS(problem, node, visited, path):
         return True
 
     for successor in problem.getSuccessors(node[0]):                        # Loop through all possible successors
-        #visitedLocations = [location[0] for location in visited.list]
         if successor[0] not in visited.list:                                # Check if this successor has not been visited before
-            isGoalFound = doDFS(problem, successor, visited, path)          # Execute recursive DFS on this successor
+            isGoalFound = doDFS(problem, successor, visited, path)          # Execute recursive DFS on each 'unvisited' successor
             if isGoalFound:
                 return("True ", node[0])
                 path.push(node[1])
