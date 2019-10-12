@@ -463,10 +463,11 @@ def foodHeuristic(state, problem):
         return 0
 
     best = util.manhattanDistance(pacmanPosition, foodList[0])
-    for food in foodList[1::]:
-        testDist = util.manhattanDistance(pacmanPosition, food)
-        if testDist < best:
-            best = testDist
+    if len(foodList) < 5:
+        for food in foodList[1:5]:
+            testDist = util.manhattanDistance(pacmanPosition, food)
+            if testDist < best:
+                best = testDist
 
     return best
 
