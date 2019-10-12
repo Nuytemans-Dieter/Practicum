@@ -102,19 +102,20 @@ def depthFirstSearch(problem):
     directions = util.Stack()
     visited = util.Stack()
     doDFS(problem, (problem.getStartState(), []), visited, directions)
-    print(directions.list)
     return directions.list
 
 def doDFS(problem, node, visited, path):
-    #if visited is None:
-    #    visited = util.Stack()
-    print("Visiting node ", node[0])
-    visited.push(node[0])                                                   # Put the visited location to the visited list
-    if problem.getStartState() is not node[0]:
+
+    # Note: a successor looks as follows: ( (xLoc, yLoc), Direction, cost )
+    #       successor[0] gives (xLoc, yLox)
+    #       successor[1] gives Direction
+
+    visited.push(node[0])                                                   # Put the visited location to the visited list so that it won't be visited again
+
+    if problem.getStartState() is not node[0]:                              # Add the move to the 'moves' list unless it is the first node (no move is required in that case!)
         path.push(node[1])
 
     if problem.isGoalState(node[0]):                                        # Return if the goal has been reached
-        return ("True Found! ", node[0])
         path.push(node[1])
         return True
 
@@ -127,9 +128,8 @@ def doDFS(problem, node, visited, path):
                 path.push(node[1])
                 return True
             else:
-                print("No goal!")
+                path.pop()
 
-    print("False ", node[0])
     return False                                                             # Completion
 
 
