@@ -426,8 +426,6 @@ class AStarFoodSearchAgent(SearchAgent):
 
 def foodHeuristic(state, problem):
     """
-    Your heuristic for the FoodSearchProblem goes here.
-
     This heuristic must be consistent to ensure correctness.  First, try to come
     up with an admissible heuristic; almost all admissible heuristics will be
     consistent as well.
@@ -452,9 +450,25 @@ def foodHeuristic(state, problem):
     Subsequent calls to this heuristic can access
     problem.heuristicInfo['wallCount']
     """
-    position, foodGrid = state
-    "*** YOUR CODE HERE ***"
-    return 0
+
+    if problem.isGoalState(state):
+        return 0
+
+    pacmanPosition, foodGrid = state        # Get PacMan's current position, along with the food grid
+
+    # Find the nearest food point
+    foodList = foodGrid.asList()
+
+    if len(foodList) is 0:
+        return 0
+
+    best = util.manhattanDistance(pacmanPosition, foodList[0])
+    for food in foodList[1::]:
+        testDist = util.manhattanDistance(pacmanPosition, food)
+        if testDist < best:
+            best = testDist
+
+    return best
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
