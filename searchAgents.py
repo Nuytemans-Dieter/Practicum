@@ -462,14 +462,15 @@ def foodHeuristic(state, problem):
     if len(foodList) is 0:
         return 0
 
-    best = util.manhattanDistance(pacmanPosition, foodList[0])
-    if len(foodList) < 5:
-        for food in foodList[1:5]:
-            testDist = util.manhattanDistance(pacmanPosition, food)
-            if testDist < best:
-                best = testDist
+    sum = 0
+    num = 0
+    for food in foodList:
+        num += 1
+        sum += util.manhattanDistance(pacmanPosition, food)
 
-    return best
+    heur = round(sum/num)
+    return heur
+
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
