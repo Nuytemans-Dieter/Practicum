@@ -120,8 +120,7 @@ def doDFS(problem, node, visited, path):
         if successor[0] not in visited.list:                                # Check if this successor has not been visited before
             isGoalFound = doDFS(problem, successor, visited, path)          # Execute recursive DFS on each 'unvisited' successor
             if isGoalFound:
-                path.push(node[1])                                          # If the goal was found, add the direction to the path
-                return True                                                 # Also return True in this case
+                return True                                                 # Return true when the path was found
             else:
                 path.pop()                                                  # If the goal hasn't been found yet, pop the top path from the Stack
 
