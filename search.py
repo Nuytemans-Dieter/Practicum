@@ -116,7 +116,6 @@ def doDFS(problem, node, visited, path):
         path.push(node[1])
 
     if problem.isGoalState(node[0]):                                        # Return if the goal has been reached
-        path.push(node[1])
         return True
 
     for successor in problem.getSuccessors(node[0]):                        # Loop through all possible successors
