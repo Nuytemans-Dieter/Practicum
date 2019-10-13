@@ -163,7 +163,8 @@ def backtrace(pLoc, pDir, start, end, directions):
         if path[-1] != start:
             directions.append(pDir[path[-1]])
     directions.reverse()
-    directions.pop(0)
+    if len(directions) is not 0:
+        directions.pop(0)
     return directions
 
 def uniformCostSearch(problem):
