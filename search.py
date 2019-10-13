@@ -128,34 +128,43 @@ def doDFS(problem, node, visited, path):
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
-    prev = []
-    directions = util.Stack()
+    isGoalFound = False
+    parentLoc = {}
+    parentDir = {}
+    directions = []
     visited = util.Stack()
     queue = util.Queue()
 
-    node = (problem.getStartState(), [])
-    queue.push(node)
-    prev[node] = None
+    start = (problem.getStartState(), [])
+    queue.push(start)
 
-    while True:
+    while not isGoalFound and queue:
         node = queue.pop()
         visited.push(node[0])
 
         if problem.isGoalState(node[0]):
-            currentN = node
-            while prev[currentN] is not None:
-                directions.push(currentN[1])
-                currentN = prev[currentN]
-            directions.push[currentN[1]]
-            return False
+            directions = backtrace(parentLoc, parentDir, start[0], node[0], directions)
+            isGoalFound = True
         else:
             for successor in problem.getSuccessors(node[0]):
                 if successor[0] not in visited.list:
+                    parentLoc[successor[0]] = node[0]
+                    parentDir[successor[0]] = node[1]
                     queue.push(successor)
-                    prev[successor] = node
 
-    print(directions.list)
-    return directions.list
+    print(directions)
+    return directions
+
+
+def backtrace(pLoc, pDir, start, end, directions):
+    path = [end]
+    while path[-1] != start:
+        path.append(pLoc[path[-1]])
+        if path[-1] != start:
+            directions.append(pDir[path[-1]])
+    directions.reverse()
+    directions.pop(0)
+    return directions
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
