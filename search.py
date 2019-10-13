@@ -128,27 +128,31 @@ def doDFS(problem, node, visited, path):
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
-
-    isGoalFound = False
-
+    prev = []
     directions = util.Stack()
     visited = util.Stack()
-    queue = []
+    queue = util.Queue()
 
     node = (problem.getStartState(), [])
-    queue.append(node)
+    queue.push(node)
+    prev[node] = None
 
-    while not isGoalFound and len(queue) is not 0:
-        node = queue.pop(0)
-        visited.push( node[0] )
-        if problem.isGoalState( node[0] ):
-            isGoalFound = True
+    while True:
+        node = queue.pop()
+        visited.push(node[0])
+
+        if problem.isGoalState(node[0]):
+            currentN = node
+            while prev[currentN] is not None:
+                directions.push(currentN[1])
+                currentN = prev[currentN]
+            directions.push[currentN[1]]
+            return False
         else:
-            if problem.getStartState() is not node[0]:
-                directions.push( node[1] )
-            for successor in problem.getSuccessors( node[0] ):
+            for successor in problem.getSuccessors(node[0]):
                 if successor[0] not in visited.list:
-                    queue.append(successor)
+                    queue.push(successor)
+                    prev[successor] = node
 
     print(directions.list)
     return directions.list
