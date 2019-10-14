@@ -40,6 +40,8 @@ from game import Actions
 import util
 import time
 import search
+from util import manhattanDistance
+
 
 class GoWestAgent(Agent):
     "An agent that goes West until it can't."
@@ -250,7 +252,7 @@ class StayWestSearchAgent(SearchAgent):
         costFn = lambda pos: 2 ** pos[0]
         self.searchType = lambda state: PositionSearchProblem(state, costFn)
 
-def manhattanHeuristic(position, problem, info={}):
+def manhattanHeuristic(position: object, problem: object, info: object = {}) -> object:
     "The Manhattan distance heuristic for a PositionSearchProblem"
     xy1 = position
     xy2 = problem.goal
@@ -500,8 +502,18 @@ class ClosestDotSearchAgent(SearchAgent):
         walls = gameState.getWalls()
         problem = AnyFoodSearchProblem(gameState)
 
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # UNUSED CODE
+        # Find the nearest food dot
+        #closestLoc = startPosition
+        #closest = 0
+        #for loc in food:
+        #    value = manhattanDistance(loc, startPosition)
+        #    if closest is not 0 and value < closest:
+        #        closest = value
+        #        closestLoc = loc
+
+        # Find a path to the nearest food dot
+        return search.uniformCostSearch(problem)
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -536,8 +548,7 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         """
         x,y = state
 
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return self.food[x][y]  # Food is a grid where each True represents a food dot. This means that True will be returned if food is present, otherwise False will be returned
 
 def mazeDistance(point1, point2, gameState):
     """
