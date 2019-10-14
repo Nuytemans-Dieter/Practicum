@@ -128,42 +128,42 @@ def doDFS(problem, node, visited, path):
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
+
     isGoalFound = False
-    parentLoc = {}
-    parentDir = {}
-    directions = []
-    visited = util.Stack()
-    queue = util.Queue()
+    parent = {}                                 # Keep track of the parent of each node
+    directions = []                             # Directions for Pacman
+    visited = util.Stack()                      # The same location can not be visited twice
+    queue = util.Queue()                        # FIFO Queue
 
-    start = (problem.getStartState(), [])
-    queue.push(start)
+    start = (problem.getStartState(), None)
+    queue.push(start)                           # The Root node will be processed first
+    visited.push(start[0])                      # Put start in visited list.
 
-    while not isGoalFound and queue:
-        node = queue.pop()
-        visited.push(node[0])
+    while not isGoalFound and queue:            # If the goal is not found, keep processing nodes in queue
+        node = queue.pop()                      # Node to be processed
 
-        if problem.isGoalState(node[0]):
-            directions = backtrace(parentLoc, parentDir, start[0], node[0], directions)
+        if problem.isGoalState(node[0]):                        # Check if goal has been reached
+            directions = backtrace(parent, node, directions)    # Backtrace from destination to source
             isGoalFound = True
         else:
-            for successor in problem.getSuccessors(node[0]):
-                if successor[0] not in visited.list:
-                    parentLoc[successor[0]] = node[0]
-                    parentDir[successor[0]] = node[1]
+            for successor in problem.getSuccessors(node[0]):    # Successors of node will be placed in queue
+                if successor[0] not in visited.list:            # Check whether successor is already visited
+                    visited.push(successor[0])                  # Put the visited location to the visited list
+                    parent[successor] = node                    # Keep parent of each node in directions list
                     queue.push(successor)
 
-    print(directions)
     return directions
 
 
-def backtrace(pLoc, pDir, start, end, directions):
-    path = [end]
-    while path[-1] != start:
-        path.append(pLoc[path[-1]])
-        if path[-1] != start:
-            directions.append(pDir[path[-1]])
+def backtrace(parent, end, directions):     # Find directions of shortest path
+    path = [end]                            # Start at end node
+    directions.append(end[1])
+    next = parent[end]
+    while next[1] is not None:              # Backtrace from destination to source
+        path.append(next)
+        directions.append(next[1])          # Add directions of shortest path to list
+        next = parent[next]
     directions.reverse()
-    directions.pop(0)
     return directions
 
 def uniformCostSearch(problem):
