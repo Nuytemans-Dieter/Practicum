@@ -107,6 +107,7 @@ def doDFS(problem, node, visited, path):
     #       successor[0] gives (xLoc, yLox)
     #       successor[1] gives Direction
 
+    print(node[0])
     visited.push( node[0] )                                                 # Put the visited location to the visited list so that it won't be visited again
 
     if problem.getStartState() is not node[0]:                              # Add the move to the 'moves' list unless it is the first node (no move is required in that case!)
@@ -130,10 +131,10 @@ def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
 
     isGoalFound = False
-    parent = {}                                 # Keep track of the parent of each node
-    directions = []                             # Directions for Pacman
-    visited = util.Stack()                      # The same location can not be visited twice
-    queue = util.Queue()                        # FIFO Queue
+    parent = {}                 # Keep track of the parent of each node
+    directions = []             # Directions for Pacman
+    visited = util.Stack()      # The same location can not be visited twice
+    queue = util.Queue()        # FIFO Queue
 
     start = (problem.getStartState(), None)
     queue.push(start)                           # The Root node will be processed first
@@ -165,6 +166,7 @@ def backtrace(parent, end, directions):     # Find directions of shortest path
         next = parent[next]
     directions.reverse()
     return directions
+
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""

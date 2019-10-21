@@ -287,25 +287,26 @@ class CornersProblem(search.SearchProblem):
             if not startingGameState.hasFood(*corner):
                 print('Warning: no food in corner ' + str(corner))
         self._expanded = 0 # DO NOT CHANGE; Number of search nodes expanded
-        self.corners_visited = [False, False, False, False]
-        self.state = (startingGameState, self.corners_visited)
-        # Please add any code here which you would like to use
-        # in initializing the problem
+        self.costFn = lambda x: 1
+        self.corners_visited = 0b0000                                       # Every bit represents a visited location.
+                                                                            # 0 = unvisited, 1 = visited
+        self.startState = (self.startingPosition, self.corners_visited)
+        self.cornerMask = (0b1000, 0b0100, 0b0010, 0b0001)                  # Change state of corner from 0 to 1.
+                                                                            # Every corner requires a specific bitmask.
 
     def getStartState(self):
         """
         Returns the start state (in your state space, not the full Pacman state
         space)
         """
-        return self.startingPosition
+        return self.startState
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
         position, corners_visited = state
-        isGoal = (corners_visited == [True, True, True, True])
-        return isGoal
+        return corners_visited == 0b1111    # Return whether all corners are visited.
 
     def getSuccessors(self, state):
         """
@@ -318,7 +319,9 @@ class CornersProblem(search.SearchProblem):
             is the incremental cost of expanding to that successor
         """
 
+        currentPosition, corners_visited = state
         successors = []
+
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             # Add a successor state to the successor list if the action is legal
             # Here's a code snippet for figuring out whether a new position hits a wall:
@@ -326,19 +329,17 @@ class CornersProblem(search.SearchProblem):
             #   dx, dy = Actions.directionToVector(action)
             #   nextx, nexty = int(x + dx), int(y + dy)
             #   hitsWall = self.walls[nextx][nexty]
-
-            position, corners_visited = state
-            x,y = position
+            x, y = currentPosition
             dx, dy = Actions.directionToVector(action)
             nextx, nexty = int(x + dx), int(y + dy)
             hitsWall = self.walls[nextx][nexty]
             if not hitsWall:
-                i = 1
-                for corner in self.corners:
-                    if corner == (nextx, nexty):
-                        cornerNr = i
-                    i = i + 1
-                successors.append(action)
+                nextState = ((nextx, nexty), corners_visited)   # Assign a new state, despite the position being a corner or not.
+                if (nextx,nexty) in self.corners:
+                    bitMask = self.cornerMask[self.corners.index((nextx, nexty))]   # Fetch the bitmask that belongs to the current corner.
+                    nextState = ((nextx, nexty), corners_visited | bitMask)         # Make the correct bit in corners_visited True.
+                cost = self.costFn(nextState)
+                successors.append( (nextState, action, cost) )  # Add new state to successors.
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
@@ -382,8 +383,6 @@ def cornersHeuristic(state, problem):
         manDis.append(distance)
 
     return min(manDis)
-
-    return 0 # Default to trivial solution
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
