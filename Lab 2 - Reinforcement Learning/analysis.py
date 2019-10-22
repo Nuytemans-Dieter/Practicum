@@ -24,40 +24,50 @@ def question2():
     answerNoise = 0.2
     return answerDiscount, answerNoise
 
+
+
+# Prefer the close exit (+1), risking the cliff (-10)
 def question3a():
-    answerDiscount = None
-    answerNoise = None
-    answerLivingReward = None
+    answerDiscount = 0.1        # Gamma value: lower discount means closer goals will be considered to be worth more (each step ^2)
+    answerNoise = 0             # The chance that the agent makes a different choice than its policy
+    answerLivingReward = 0      # The reward or penalty offered at each move
     return answerDiscount, answerNoise, answerLivingReward
-    # If not possible, return 'NOT POSSIBLE'
 
+
+
+# Prefer the close exit (+1), but avoiding the cliff (-10)
 def question3b():
-    answerDiscount = None
-    answerNoise = None
-    answerLivingReward = None
+    answerDiscount = 0.1		# Low gamma value is needed: prefer close exit
+    answerNoise = 0.1 			# Noise may make the agent move into the cliff: the agent prevents this by taking the top route
+    answerLivingReward = 0      # No reward is required
     return answerDiscount, answerNoise, answerLivingReward
-    # If not possible, return 'NOT POSSIBLE'
 
+
+
+# Prefer the distant exit (+10), risking the cliff (-10)
 def question3c():
-    answerDiscount = None
-    answerNoise = None
-    answerLivingReward = None
+    answerDiscount = 0.1		# Only a small penalty for moving further: goals that are far away are desired
+    answerNoise = 0 			# No noise, else the cliff is too dangerous for the agent
+    answerLivingReward = 5	    # Give the agent a reward for moving further
     return answerDiscount, answerNoise, answerLivingReward
-    # If not possible, return 'NOT POSSIBLE'
 
+
+
+# Prefer the distant exit (+10), avoiding the cliff (-10)
 def question3d():
     answerDiscount = None
-    answerNoise = None
+    answerNoise = 0 			# Random actions are not desired
     answerLivingReward = None
     return answerDiscount, answerNoise, answerLivingReward
-    # If not possible, return 'NOT POSSIBLE'
 
+
+
+# Avoid both exits and the cliff (so an episode should never terminate)
 def question3e():
     answerDiscount = None
-    answerNoise = None
+    answerNoise = 0 			# Random actions are not desired
     answerLivingReward = None
     return answerDiscount, answerNoise, answerLivingReward
-    # If not possible, return 'NOT POSSIBLE'
 
 def question8():
     answerEpsilon = None
