@@ -42,7 +42,7 @@ class QLearningAgent(ReinforcementAgent):
         "You can initialize Q-values here..."
         ReinforcementAgent.__init__(self, **args)
 
-        "*** YOUR CODE HERE ***"
+        self.Q = util.Counter()
 
     def getQValue(self, state, action):
         """
@@ -50,9 +50,8 @@ class QLearningAgent(ReinforcementAgent):
           Should return 0.0 if we have never seen a state
           or the Q node value otherwise
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
 
+        return self.Q[(state, action)]
 
     def computeValueFromQValues(self, state):
         """
@@ -61,8 +60,16 @@ class QLearningAgent(ReinforcementAgent):
           there are no legal actions, which is the case at the
           terminal state, you should return a value of 0.0.
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+
+        values = []
+        actions = self.getLegalActions()
+        if len(actions) != 0:
+            for action in actions:
+                value = self.getQValue(state, action)
+                values.append(value)
+            return max(values)
+        return 0.0
+
 
     def computeActionFromQValues(self, state):
         """
@@ -70,8 +77,18 @@ class QLearningAgent(ReinforcementAgent):
           are no legal actions, which is the case at the terminal state,
           you should return None.
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+
+        actions = []
+        legalActions = self.getLegalActions()
+        value = self.computeValueFromQValues(state)
+
+        if len(legalActions) != 0:
+            for action in legalActions:
+                if value is self.getQValue(state, action):
+                    actions.append(action)
+            return random.choice(actions)
+        return None
+
 
     def getAction(self, state):
         """
@@ -101,7 +118,8 @@ class QLearningAgent(ReinforcementAgent):
           NOTE: You should never call this function,
           it will be called on your behalf
         """
-        "*** YOUR CODE HERE ***"
+
+
         util.raiseNotDefined()
 
     def getPolicy(self, state):
