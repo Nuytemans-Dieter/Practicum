@@ -51,7 +51,7 @@ class QLearningAgent(ReinforcementAgent):
           or the Q node value otherwise
         """
 
-        return self.Q[(state, action)]
+        return self.Q[(state, action)]      # Return Q node value.
 
     def computeValueFromQValues(self, state):
         """
@@ -61,14 +61,14 @@ class QLearningAgent(ReinforcementAgent):
           terminal state, you should return a value of 0.0.
         """
 
-        values = []
-        actions = self.getLegalActions()
-        if len(actions) != 0:
+        values = []     # List of possible values we can return.
+        actions = self.getLegalActions(state)
+        if len(actions) != 0:           # Only return action if we are not in the terminal state.
             for action in actions:
                 value = self.getQValue(state, action)
-                values.append(value)
-            return max(values)
-        return 0.0
+                values.append(value)    # Add possible value to list.
+            return max(values)          # Return the maximum value.
+        return 0.0                      # Return 0.0 as value in case of terminal state.
 
 
     def computeActionFromQValues(self, state):
@@ -78,16 +78,16 @@ class QLearningAgent(ReinforcementAgent):
           you should return None.
         """
 
-        actions = []
-        legalActions = self.getLegalActions()
+        actions = []    # List of possible actions we can return.
+        legalActions = self.getLegalActions(state)
         value = self.computeValueFromQValues(state)
 
-        if len(legalActions) != 0:
+        if len(legalActions) != 0:          # Only return action if we are not in the terminal state.
             for action in legalActions:
                 if value is self.getQValue(state, action):
-                    actions.append(action)
+                    actions.append(action)  # Add possible action to list.
             return random.choice(actions)
-        return None
+        return None                         # Return None in case of terminal state.
 
 
     def getAction(self, state):
@@ -103,12 +103,12 @@ class QLearningAgent(ReinforcementAgent):
         """
         # Pick Action
         legalActions = self.getLegalActions(state)
-        action = None
+        action = None                                   # Return None as action in case of terminal state.
 
         if util.flipCoin(self.epsilon):
-            action = random.choice(legalActions)
+            action = random.choice(legalActions)        # Return random action.
         else:
-            action = self.computeActionFromQValues(state)
+            action = self.getPolicy(state)              # Take the best policy action otherwise.
         return action
 
 
@@ -122,8 +122,10 @@ class QLearningAgent(ReinforcementAgent):
           it will be called on your behalf
         """
 
+        # Q learning algorithm. Core of algorithm is a simple value iteration update,
+        # using the weighted average of the old value and the new information.
+        self.Q[(state, action)] = (1 - self.alpha) * self.Q[(state, action)] + self.alpha * (reward + self.discount * self.computeValueFromQValues(nextState))
 
-        util.raiseNotDefined()
 
     def getPolicy(self, state):
         return self.computeActionFromQValues(state)
