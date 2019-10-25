@@ -72,8 +72,9 @@ def question3e():
 def question8():
     answerEpsilon = None
     answerLearningRate = None
-    return answerEpsilon, answerLearningRate
-    # If not possible, return 'NOT POSSIBLE'
+
+    return 'NOT POSSIBLE'
+    # There is no combination of values for which the optimal policy will be learned.
 
 if __name__ == '__main__':
     print('Answers to analysis questions:')
