@@ -217,16 +217,16 @@ def aStarSearch(problem, heuristic=nullHeuristic):
         if toDo.isEmpty():                          # Stop if there are no nodes left to check
             return []
 
-        node, directions = toDo.pop()         # Take the top contents of the to-do queue
+        node, directions = toDo.pop()         # Take the lowest-cost contents out of the to-do queue
 
-        if problem.isGoalState(node):         # Return the path if the goal has been reached
+        if problem.isGoalState(node):         # Return the path if the goal has been reached. This exits the loop
             return directions
 
         if node not in visited.list:                                        # Make sure the node hasn't been visited
-            visited.push(node)                                              # Visit this node, add it to visited
-            for successor, direction, cost in problem.getSuccessors(node):  # Loop all next possible options for this node
+            visited.push(node)                                              # Add this node to visited so that it won't be visited again
+            for successor, direction, cost in problem.getSuccessors(node):  # Loop all next possible actions (as nodes) for this node
                 heur = heuristic( successor, problem )                      # Calculate the heuristic of the underlying successor
-                costs[ successor ] = costs[ node ] + cost                   # Update the cost of this node
+                costs[ successor ] = costs[ node ] + cost                   # Update the cost of this path
                 toDo.push(( successor, directions + [ direction ] ), costs[ successor ] + heur )  # Modify the to-do list for the next loop execution(s)
 
 
