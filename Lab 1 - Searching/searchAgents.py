@@ -555,7 +555,7 @@ class ClosestDotSearchAgent(SearchAgent):
         #        closestLoc = loc
 
         # Find a path to the nearest food dot
-        return search.uniformCostSearch(problem)
+        return search.breadthFirstSearch(problem)
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
