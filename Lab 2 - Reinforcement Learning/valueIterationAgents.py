@@ -62,7 +62,21 @@ class ValueIterationAgent(ValueEstimationAgent):
     def runValueIteration(self):
         # Write value iteration code here
         "*** YOUR CODE HERE ***"
+        for k in range(self.iterations):      #de iterations zijn in init bepaald, hoe hoger, hoe betere convergence
+            currValues = self.values.copy()              #eerste keer zijn het gewoon de waarden die die krijgt van init
 
+            for state in self.mdp.getStates() :     #via mdp.getStates() krijg je alle states
+                if self.mdp.isTerminal(state):
+                    continue
+                actions = self.mdp.getPossibleActions(state)    #krijg alle mogelijke acties en steek die in variable
+                besteValue = -999999                #om de hierna de maximum value te bepalen maak ik deze zeer laag
+
+                for action in actions :          #bekijk voor een bepaalde state alle mogelijke actions
+                    if(self.getQValue(state,action) > besteValue)  : #en bepaal maximum van de Qvalues om de beste Value te bepalen
+                        besteValue = self.getQValue(state,action)
+
+                currValues[state] = besteValue      #de value in een bepaalde state wordt aangepast naar de momenteel optimale value voor de kde stap
+            self.values = currValues                #de bekomen optimale values worden in values gezet
 
     def getValue(self, state):
         """
@@ -77,6 +91,11 @@ class ValueIterationAgent(ValueEstimationAgent):
           value function stored in self.values.
         """
         "*** YOUR CODE HERE ***"
+        Q = 0           #zet Qvalue op 0
+        for (nextState,prob) in self.mdp.getTransitionStatesAndProbs(state,action) : #voor alle mogelijke next states krijg je de probability en je loopt over
+            Q = Q + prob*(self.mdp.getReward(state, action, nextState)+self.discount*self.getValue(nextState)) #die nextstate,probabilityparen en berekent zo Q
+        return Q
+
         util.raiseNotDefined()
 
     def computeActionFromValues(self, state):
@@ -89,7 +108,17 @@ class ValueIterationAgent(ValueEstimationAgent):
           terminal state, you should return None.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        #optimalQ = -9999
+        #actions = {}        #maak dictionary => Qvalue,action => dus voor elke action kan je terugvinden met de Qvalue als key
+        #                    #de beste action is de degene met de hoogste Qvalue als key
+        #for action in self.mdp.getPossibleActions(state) :
+        #    currQ = computeQValueFromValues(state,action)
+        #    actions[currQ] = action
+        #    if (optimalQ < currQ) :
+        #        optimalQ = currQ
+#
+        #return actions[optimalQ]
+        #util.raiseNotDefined()
 
     def getPolicy(self, state):
         return self.computeActionFromValues(state)

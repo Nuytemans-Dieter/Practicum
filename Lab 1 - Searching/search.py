@@ -170,26 +170,26 @@ def backtrace(parent, end, directions):     # Find directions of shortest path
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    # node is een state of eerder een positie
+    # node is een state en bevat de positie, actions en cost
     # actions gaat bijhouden welke directions moeten uitgegaan worden
     # cost is hoeveel het kost om bij de beschouwde node te geraken
     # priority zorgt er in de priorityqueue voor dat degene met de laagste priority als eerste wordt gepopt
-    
-    actions = []
-    node = (problem.getStartState(), actions,0) # node bevat state, actions (dus welke stappen ondernomen worden), en cost om er te geraken)
-                                                # eerst is de cost 0 want ge begint van deze positie
-    pQ = util.PriorityQueue()                   # maak priorityqueue
-    pQ.push(node, 0)                            # zet eerste node in de priorityqueue
-    visited = []                                # maak lege list om de bezochte node te bepalen
+    node = (problem.getStartState(), [],
+            0)  # node bevat state, actions (dus welke stappen ondernomen worden), en cost om er te geraken)
+    # eerst is de cost 0 want ge begint van deze positie
+    pQ = util.PriorityQueue()  # maak priorityqueue
+    pQ.push(node, 0)  # zet eerste node in de priorityqueue
+    visited = []  # maak lege list om de bezochte node te bepalen
 
-    while pQ.isEmpty() != True:                 # check de pQ totdat die leeg is
-        (node, actions, stepCost) = pQ.pop()             # eigenschap van pQ is dat het item met de laagste cost wordt gepopt
+    while pQ.isEmpty() != True:  # check de pQ totdat die leeg is
+        (node, actions, stepCost) = pQ.pop()  # eigenschap van pQ is dat het item met de laagste cost wordt gepopt
         if problem.isGoalState(node):
             break
         if node not in visited:
             visited.append(node)
-            for successor in problem.getSuccessors(node):   # getSuccessor geeft (node, action, stepCost) terug als list
-                newAction = actions + [successor[1]]        # Kan alleen een list met list concatinaten daarom moet de string (successor[1]) nog eens tussen []
+            for successor in problem.getSuccessors(node):  # getSuccessor geeft (node, action, stepCost) terug als list
+                newAction = actions + [successor[
+                                           1]]  # Kan alleen een list met list concatinaten daarom moet de string (successor[1]) nog eens tussen []
                 newStepCost = stepCost + successor[2]
                 newNode = (successor[0], newAction, newStepCost)
                 pQ.update(newNode, newStepCost)
