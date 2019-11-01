@@ -174,22 +174,20 @@ def uniformCostSearch(problem):
     # actions gaat bijhouden welke directions moeten uitgegaan worden
     # cost is hoeveel het kost om bij de beschouwde node te geraken
     # priority zorgt er in de priorityqueue voor dat degene met de laagste priority als eerste wordt gepopt
-    node = (problem.getStartState(), [],
-            0)  # node bevat state, actions (dus welke stappen ondernomen worden), en cost om er te geraken)
+    node = (problem.getStartState(), [],0)  # node bevat state, actions (dus welke stappen ondernomen worden), en cost om er te geraken)
     # eerst is de cost 0 want ge begint van deze positie
     pQ = util.PriorityQueue()  # maak priorityqueue
     pQ.push(node, 0)  # zet eerste node in de priorityqueue
     visited = []  # maak lege list om de bezochte node te bepalen
 
     while pQ.isEmpty() != True:  # check de pQ totdat die leeg is
-        (node, actions, stepCost) = pQ.pop()  # eigenschap van pQ is dat het item met de laagste cost wordt gepopt
+        (node, actions, stepCost) = pQ.pop()  # eigenschap van pQ is dat het item met de laagste priority (wat neerkomt op de stepCost) wordt gepopt
         if problem.isGoalState(node):
             break
         if node not in visited:
             visited.append(node)
             for successor in problem.getSuccessors(node):  # getSuccessor geeft (node, action, stepCost) terug als list
-                newAction = actions + [successor[
-                                           1]]  # Kan alleen een list met list concatinaten daarom moet de string (successor[1]) nog eens tussen []
+                newAction = actions + [successor[1]]  # Kan alleen een list met list concatinaten daarom moet de string (successor[1]) nog eens tussen []
                 newStepCost = stepCost + successor[2]
                 newNode = (successor[0], newAction, newStepCost)
                 pQ.update(newNode, newStepCost)
