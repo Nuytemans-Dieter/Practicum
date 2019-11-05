@@ -66,16 +66,18 @@ class ValueIterationAgent(ValueEstimationAgent):
             currValues = self.values.copy()              #eerste keer zijn het gewoon de waarden die die krijgt van init
 
             for state in self.mdp.getStates() :     #via mdp.getStates() krijg je alle states
-                if self.mdp.isTerminal(state):
-                    continue
-                actions = self.mdp.getPossibleActions(state)    #krijg alle mogelijke acties en steek die in variable
-                besteValue = -999999                #om de hierna de maximum value te bepalen maak ik deze zeer laag
 
-                for action in actions :          #bekijk voor een bepaalde state alle mogelijke actions
-                    if(self.getQValue(state,action) > besteValue)  : #en bepaal maximum van de Qvalues om de beste Value te bepalen
-                        besteValue = self.getQValue(state,action)
+                if self.mdp.isTerminal(state):      #als je in de terminal state bent, wil je niet dat de rest van de loop wordt uitgevoerd
+                    {}                              #want dan heeft de state geen mogelijke actions
+                else:
+                    actions = self.mdp.getPossibleActions(state)    #krijg alle mogelijke acties en steek die in variable
+                    besteValue = -999999                #om de hierna de maximum value te bepalen maak ik deze zeer laag
 
-                currValues[state] = besteValue      #de value in een bepaalde state wordt aangepast naar de momenteel optimale value voor de kde stap
+                    for action in actions :          #bekijk voor een bepaalde state alle mogelijke actions
+                        if(self.getQValue(state,action) > besteValue)  : #en bepaal maximum van de Qvalues om de beste Value te bepalen
+                            besteValue = self.getQValue(state,action)
+
+                    currValues[state] = besteValue      #de value in een bepaalde state wordt aangepast naar de momenteel optimale value voor de kde stap
             self.values = currValues                #de bekomen optimale values worden in values gezet
 
     def getValue(self, state):
@@ -108,17 +110,18 @@ class ValueIterationAgent(ValueEstimationAgent):
           terminal state, you should return None.
         """
         "*** YOUR CODE HERE ***"
-        #optimalQ = -9999
-        #actions = {}        #maak dictionary => Qvalue,action => dus voor elke action kan je terugvinden met de Qvalue als key
-        #                    #de beste action is de degene met de hoogste Qvalue als key
-        #for action in self.mdp.getPossibleActions(state) :
-        #    currQ = computeQValueFromValues(state,action)
-        #    actions[currQ] = action
-        #    if (optimalQ < currQ) :
-        #        optimalQ = currQ
-#
-        #return actions[optimalQ]
-        #util.raiseNotDefined()
+        #had eerst geprobeerd met gewone dictionary maar werkte niet
+        #met util.Counter() werkte het wel en argMax is gemakkelijk
+        dictionary = util.Counter()     #maak dictionary met (Qvalue,action) paren
+
+        for action in self.mdp.getPossibleActions(state):
+            dictionary[action] = self.computeQValueFromValues(state, action) #dictionary wordt opgevuld met (Qvalue,action) paren
+
+
+
+        return dictionary.argMax()  #returns the key with the maximum value
+
+        util.raiseNotDefined()
 
     def getPolicy(self, state):
         return self.computeActionFromValues(state)
