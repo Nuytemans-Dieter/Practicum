@@ -118,7 +118,6 @@ class ValueIterationAgent(ValueEstimationAgent):
             dictionary[action] = self.computeQValueFromValues(state, action) #dictionary wordt opgevuld met (Qvalue,action) paren
 
 
-
         return dictionary.argMax()  #returns the key with the maximum value
 
         util.raiseNotDefined()
