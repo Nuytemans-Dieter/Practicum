@@ -38,7 +38,7 @@ def question3a():
 # Prefer the close exit (+1), but avoiding the cliff (-10)
 def question3b():
     answerDiscount = 0.1		# Low gamma value is needed: prefer close exit
-    answerNoise = 0.1 			# Noise may make the agent move into the cliff: the agent prevents this by taking the top route
+    answerNoise = 0.1 			# Noise may make the agent move into the cliff but the agent takes the top route (dus helaas wel wat random gedrag)
     answerLivingReward = 0      # No reward is required
     return answerDiscount, answerNoise, answerLivingReward
 
@@ -48,25 +48,25 @@ def question3b():
 def question3c():
     answerDiscount = 0.1		# Only a small penalty for moving further: goals that are far away are desired
     answerNoise = 0 			# No noise, else the cliff is too dangerous for the agent
-    answerLivingReward = 5	    # Give the agent a reward for moving further
+    answerLivingReward = 1	    # Give the agent a reward for moving further
     return answerDiscount, answerNoise, answerLivingReward
 
 
 
 # Prefer the distant exit (+10), avoiding the cliff (-10)
 def question3d():
-    answerDiscount = None
-    answerNoise = 0 			# Random actions are not desired
-    answerLivingReward = None
+    answerDiscount = 1          # discount is 1 zodat niet naar het snelste einde wordt gezocht
+    answerNoise = 0.1 			# we hebben noise nodig om de bovenste route te kunnen nemen zoals al eerder gezien is (dus helaas wel wat random gedrag)
+    answerLivingReward = -0.1   # Deze wordt aangepast om uiteindelijk de +10 te bereiken
     return answerDiscount, answerNoise, answerLivingReward
 
 
 
 # Avoid both exits and the cliff (so an episode should never terminate)
 def question3e():
-    answerDiscount = None
+    answerDiscount = 0
     answerNoise = 0 			# Random actions are not desired
-    answerLivingReward = None
+    answerLivingReward = 1000   #living reward is hoog zodat de agent steed zal verkiezen om te blijven overleven en in het spel te blijven.
     return answerDiscount, answerNoise, answerLivingReward
 
 def question8():
