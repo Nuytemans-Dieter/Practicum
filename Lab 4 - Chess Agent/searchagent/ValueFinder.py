@@ -3,13 +3,22 @@ import math
 import random
 import sys
 
+pieceValues = {
+    'k': 9000,  # King   /  Koning
+    'q': 90,    # Queen  /  Koningin
+    'r': 50,    # Rook   /  Toren
+    'b': 32,    # Bishop /  Loper
+    'n': 30,    # Knight /  Paard
+    'p': 10,    # Pawn   /  Pion
+}
+
 def evaluate(board):
 
     totalValue = 0
 
     for i in range(0, 63):
         white = True
-        if (board.piece_at(i) != None):
+        if board.piece_at(i) != None:
             white = bool(board.piece_at(i).color)
             multiplier = 1
             if not white:
@@ -30,22 +39,6 @@ def evaluate(board):
         evaluation = evaluation + (getPieceValue(str(board.piece_at(i))) if x else -getPieceValue(str(board.piece_at(i))))
     return evaluation
 
-
+# Get the value of the piece
 def getPieceValue(piece):
-    if(piece == None):
-        return 0
-    value = 0
-    if piece == "P" or piece == "p":
-        value = 10
-    if piece == "N" or piece == "n":
-        value = 30
-    if piece == "B" or piece == "b":
-        value = 32
-    if piece == "R" or piece == "r":
-        value = 50
-    if piece == "Q" or piece == "q":
-        value = 90
-    if piece == 'K' or piece == 'k':
-        value = 9000
-
-    return value
+    return pieceValues.get(piece.lower(), 0);

@@ -1,6 +1,6 @@
 import random
 import chess
-from searchagent.ValueFinder.py import evaluate
+from searchagent.ValueFinder import evaluate
 
 class SearchAgent(object):
 
