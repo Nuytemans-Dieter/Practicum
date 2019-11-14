@@ -47,7 +47,7 @@ class SearchAgent(object):
 
     def minimax(self, board: chess.Board, depth, maximizingPlayer):
         if depth == 0:
-            return evaluate(board), None
+            return evaluate(board)
         if maximizingPlayer:
             maxEval = float("-inf")
             for x in board.legal_moves:
