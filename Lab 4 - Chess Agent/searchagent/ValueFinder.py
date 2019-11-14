@@ -3,12 +3,14 @@ import math
 import random
 import sys
 
+# Based on Hans Berliner's system
+# See: https://en.wikipedia.org/wiki/Chess_piece_relative_value
 pieceValues = {
     'k': 9000,  # King   /  Koning
-    'q': 90,    # Queen  /  Koningin
-    'r': 50,    # Rook   /  Toren
-    'b': 32,    # Bishop /  Loper
-    'n': 30,    # Knight /  Paard
+    'q': 88,    # Queen  /  Koningin
+    'r': 51,    # Rook   /  Toren
+    'b': 33,    # Bishop /  Loper
+    'n': 32,    # Knight /  Paard
     'p': 10,    # Pawn   /  Pion
 }
 
@@ -17,13 +19,15 @@ def evaluate(board):
     totalValue = 0
 
     for i in range(0, 63):
-        white = True
-        if board.piece_at(i) != None:
-            white = bool(board.piece_at(i).color)
-            multiplier = 1
-            if not white:
+        isWhite = True
+        piece = board.piece_at(i)
+        if piece != None:
+            isWhite = bool(board.piece_at(i).color)
+            if isWhite:
+                multiplier = 1
+            else:
                 multiplier = -1
-            totalValue += multiplier * getPieceValue(str(board.piece_at(i)))
+            totalValue += multiplier * getPieceValue( str(piece) )
 
     return totalValue
 

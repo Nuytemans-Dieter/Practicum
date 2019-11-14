@@ -17,7 +17,7 @@ def main():
         move = None
 
         if turn_white_player:
-            value, move = white_player.minimax(board, 1, turn_white_player)
+            value, move = white_player.minimax(board, 3, turn_white_player)
             print("The current board value is", evaluate(board))
             print("The best move gives value", value)
             turn_white_player = False
