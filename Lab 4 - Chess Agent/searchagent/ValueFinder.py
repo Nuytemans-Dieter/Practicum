@@ -19,15 +19,14 @@ def evaluate(board):
     totalValue = 0
 
     for i in range(0, 63):
-        isWhite = True
         piece = board.piece_at(i)
         if piece != None:
-            isWhite = bool(board.piece_at(i).color)
+            isWhite = bool( piece.color )
+            value = getPieceValue( str(piece) )
             if isWhite:
-                multiplier = 1
+                totalValue += value
             else:
-                multiplier = -1
-            totalValue += multiplier * getPieceValue( str(piece) )
+                totalValue -= value
 
     return totalValue
 
