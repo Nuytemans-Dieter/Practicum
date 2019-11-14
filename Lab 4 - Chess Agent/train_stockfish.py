@@ -1,9 +1,7 @@
 #!/usr/bin/python3
 import chess
 import chess.engine
-from searchagent.ValueFinder.py import evaluate
 from searchagent.search_agent import SearchAgent
-
 
 
 def main():
@@ -18,10 +16,9 @@ def main():
     while running:
         move = None
 
-        print( "Board value: ", evaluate( board ) )
-
         if turn_white_player:
-            move = white_player.random_move(board=board)
+            # move = white_player.random_move(board=board)
+            value, move = white_player.minimax(board, 3, turn_white_player)
             turn_white_player = False
 
         else:

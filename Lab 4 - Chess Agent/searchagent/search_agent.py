@@ -1,6 +1,6 @@
 import random
 import chess
-from ValueFinder.py import evaluate
+from searchagent.ValueFinder.py import evaluate
 
 class SearchAgent(object):
 
@@ -47,7 +47,7 @@ class SearchAgent(object):
 
     def minimax(self, board: chess.Board, depth, maximizingPlayer):
         if depth == 0:
-            return evaluate(board)
+            return evaluate(board), None
         if maximizingPlayer:
             maxEval = float("-inf")
             for x in board.legal_moves:
@@ -55,8 +55,10 @@ class SearchAgent(object):
                 board.push(move)
                 evaluation = self.minimax(board, depth - 1, False)
                 maxEval = max(maxEval, evaluation)
+                if evaluation > maxEval & depth == depth:
+                    best_move = x
                 board.pop()
-            return maxEval
+            return maxEval, best_move
         else:
             minEval = float("inf")
             for x in board.legal_moves:
