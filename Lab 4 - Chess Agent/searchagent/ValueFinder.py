@@ -31,18 +31,6 @@ def evaluate(board):
 
     return totalValue
 
-    i = 0
-    evaluation = 0
-    x = True
-    try:
-        x = bool(board.piece_at(i).color)
-    except AttributeError as e:
-        x = x
-    while i < 63:
-        i += 1
-        evaluation = evaluation + (getPieceValue(str(board.piece_at(i))) if x else -getPieceValue(str(board.piece_at(i))))
-    return evaluation
-
 # Get the value of the piece
 def getPieceValue(piece):
     return pieceValues.get(piece.lower(), 0);
