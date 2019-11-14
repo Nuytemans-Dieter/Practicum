@@ -2,7 +2,7 @@
 import chess
 import chess.engine
 from searchagent.search_agent import SearchAgent
-
+from searchagent.ValueFinder import evaluate
 
 def main():
     board = chess.Board()
@@ -17,8 +17,9 @@ def main():
         move = None
 
         if turn_white_player:
-            # move = white_player.random_move(board=board)
             value, move = white_player.minimax(board, 3, turn_white_player)
+            print("The best move gives value", value)
+            print("The current board value is", evaluate(board))
             turn_white_player = False
 
         else:

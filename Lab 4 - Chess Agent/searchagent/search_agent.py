@@ -11,7 +11,6 @@ class SearchAgent(object):
         self.author = "S. Vanneste"
 
     def random_move(self, board: chess.Board):
-        print(list(board.legal_moves))
         return random.sample(list(board.legal_moves), 1)[0]
 
     def random_with_first_level_search(self, board: chess.Board):
@@ -47,24 +46,28 @@ class SearchAgent(object):
 
     def minimax(self, board: chess.Board, depth, maximizingPlayer):
         if depth == 0:
-            return evaluate(board)
-        if maximizingPlayer:
-            maxEval = float("-inf")
-            for x in board.legal_moves:
-                move = chess.Move.from_uci(str(x))
-                board.push(move)
-                evaluation = self.minimax(board, depth - 1, False)
-                maxEval = max(maxEval, evaluation)
-                if evaluation > maxEval & depth == depth:
-                    best_move = x
-                board.pop()
-            return maxEval, best_move
-        else:
-            minEval = float("inf")
-            for x in board.legal_moves:
-                move = chess.Move.from_uci(str(x))
-                board.push(move)
-                evaluation = self.minimax(board, depth - 1, True)
-                minEval = min(minEval, evaluation)
-                board.pop()
-            return minEval
+            return evaluate(board), None
+
+        bestMove = None  # This variable will be used to track the best move so far
+        bestVal = None   # This variable will be used to track the board value after the best move so far
+
+        # Find an optimal move
+        for moveUCI in board.legal_moves:               # Iterate through all possible moves of all pieces
+            move = chess.Move.from_uci( str(moveUCI) )  # Convert the move to the right input
+            board.push(move)                            # Execute the move
+            boardValue, foundMove = self.minimax(board, depth -1, not maximizingPlayer)    # Test possible moves for the other player
+
+            if maximizingPlayer:                            # If calculating the best move for the agent
+
+                if bestVal is None or boardValue > bestVal: # If this is the first iteration OR a better move has been found
+                    bestVal = boardValue                    # Update the best move
+
+                if boardValue == bestVal:                   # These are equal if the current move is better
+                    bestMove = move                         # Set the current best move
+            else:
+
+                if bestVal is None or boardValue < bestVal: # If this is the first iteration OR a better move has been found for the opponent
+                    bestVal = boardValue                    # Update the enemy's best move
+
+            board.pop()                                     # Undo the move
+        return bestVal, bestMove                            # Return the value of the best move and the best move
