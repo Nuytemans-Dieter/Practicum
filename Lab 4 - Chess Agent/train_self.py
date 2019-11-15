@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 import chess
+
+from searchagent.ValueFinder import evaluate
 from searchagent.search_agent import SearchAgent
 
 
@@ -19,14 +21,14 @@ def run_episode():
         move = None
 
         if turn_white_player:
-            move = white_player.random_move(board=board)
-            turn_white_player = False
+            value, move = white_player.minimax(board, 3, turn_white_player)
+            print("The current board value is", evaluate(board))
+            print("The best move gives value", value)
             print("white")
-
         else:
-            # move = black_player.random_move(board=board)
-            move = black_player.random_with_first_level_search(board=board)
-            turn_white_player = True
+            value, move = black_player.minimax(board, 3, turn_white_player)
+            print("The current board value is", evaluate(board))
+            print("The best move gives value", value)
             print("Black")
 
         board.push(move)
