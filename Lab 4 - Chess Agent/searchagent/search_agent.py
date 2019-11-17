@@ -74,7 +74,8 @@ class SearchAgent(object):
 
     def AlphaBeta(self, board: chess.Board, depth, alpha, beta, maximizingPlayer):
         if depth == 0 or board.is_checkmate():
-            return evaluate(board), None
+            # return evaluate(board), None
+            return self.quis(board, alpha, beta), None
 
         bestMove = None     # This variable will be used to track the best move so far
         bestVal = None      # This variable will be used to track the board value after the best move so far
@@ -120,9 +121,9 @@ class SearchAgent(object):
         for moveUCI in board.legal_moves:   # For every capture:
 
             if board.is_capture(moveUCI):   # Keep searching until all captures are made or we get a cutoff.
-                move = chess.Move.from_uci(str(moveUCI))
+                move = chess.Move.from_uci( str(moveUCI) )
                 board.push(move)
-                score = -self.quis(-beta, -alpha)
+                score = -self.quis(board, -beta, -alpha)
                 board.pop
                 if score >= beta:
                     return beta

@@ -10,6 +10,7 @@ def main():
     black_player = chess.engine.SimpleEngine.popen_uci("stockfish")
     limit = chess.engine.Limit(time=5.0)
 
+    inf = float('inf')
     running = True
     turn_white_player = True
 
@@ -18,7 +19,7 @@ def main():
 
         if turn_white_player:
             # value, move = white_player.minimax(board, 3, turn_white_player)
-            value, move = white_player.AlphaBeta(board, 3, None, None, turn_white_player)
+            value, move = white_player.AlphaBeta(board, 3, -inf, inf, turn_white_player)
             print("The current board value is", evaluate(board))
             print("The best move gives value", value)
             turn_white_player = False

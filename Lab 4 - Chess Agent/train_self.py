@@ -12,6 +12,7 @@ def run_episode():
     black_player = SearchAgent(time_limit=5)
     black_player.name = "Black Player"
 
+    inf = float('inf')
     running = True
     turn_white_player = True
     counter = 0
@@ -22,13 +23,13 @@ def run_episode():
 
         if turn_white_player:
             # value, move = white_player.minimax(board, 3, turn_white_player)
-            value, move = white_player.AlphaBeta(board, 3, None, None, turn_white_player)
+            value, move = white_player.AlphaBeta(board, 3, -inf, inf, turn_white_player)
             print("The current board value is", evaluate(board))
             # print("The best move gives value", value)
             # print("white")
         else:
             # value, move = black_player.minimax(board, 3, turn_white_player)
-            value, move = black_player.AlphaBeta(board, 3, None, None, turn_white_player)
+            value, move = black_player.AlphaBeta(board, 3, -inf, inf, turn_white_player)
             # move = black_player.random_move(board)
             print("The current board value is", evaluate(board))
             # print("The best move gives value", value)
