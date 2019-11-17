@@ -32,4 +32,4 @@ def evaluate(board):
 
 # Get the value of the piece
 def getPieceValue(piece):
-    return pieceValues.get(piece.lower(), 0);
+    return pieceValues.get(piece.lower(), 0)

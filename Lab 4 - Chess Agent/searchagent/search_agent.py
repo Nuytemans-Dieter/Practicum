@@ -45,7 +45,7 @@ class SearchAgent(object):
         return best_move
 
     def minimax(self, board: chess.Board, depth, maximizingPlayer):
-        if depth == 0:
+        if depth == 0 or board.is_checkmate():
             return evaluate(board), None
 
         bestMove = None  # This variable will be used to track the best move so far
@@ -73,7 +73,7 @@ class SearchAgent(object):
         return bestVal, bestMove                            # Return the value of the best move and the best move
 
     def AlphaBeta(self, board: chess.Board, depth, alpha, beta, maximizingPlayer):
-        if depth == 0:
+        if depth == 0 or board.is_checkmate():
             return evaluate(board), None
 
         bestMove = None     # This variable will be used to track the best move so far
@@ -108,3 +108,25 @@ class SearchAgent(object):
                     break                                   # Don't process unnecessary nodes. Prune positions.
 
         return bestVal, bestMove                            # Return the value of the best move and the best move
+
+    def quis(self, board: chess.Board(), alpha, beta):
+        eval = evaluate(board)
+        if eval >= beta:    # Cutoff: white or black already found a better value.
+            return beta
+
+        if alpha < eval:    # Better move than our last move.
+            alpha = eval
+
+        for moveUCI in board.legal_moves:   # For every capture:
+
+            if board.is_capture(moveUCI):   # Keep searching until all captures are made or we get a cutoff.
+                move = chess.Move.from_uci(str(moveUCI))
+                board.push(move)
+                score = -self.quis(-beta, -alpha)
+                board.pop
+                if score >= beta:
+                    return beta
+                if score > alpha:
+                    alpha = score   # Capture that improves our last best move.
+
+        return alpha
