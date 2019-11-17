@@ -21,15 +21,17 @@ def run_episode():
         move = None
 
         if turn_white_player:
-            value, move = white_player.minimax(board, 3, turn_white_player)
+            # value, move = white_player.minimax(board, 3, turn_white_player)
+            value, move = white_player.AlphaBeta(board, 3, None, None, turn_white_player)
             print("The current board value is", evaluate(board))
-            print("The best move gives value", value)
-            print("white")
+            # print("The best move gives value", value)
+            # print("white")
         else:
-            value, move = black_player.minimax(board, 3, turn_white_player)
+            # value, move = black_player.minimax(board, 3, turn_white_player)
+            value, move = white_player.AlphaBeta(board, 3, None, None, turn_white_player)
             print("The current board value is", evaluate(board))
-            print("The best move gives value", value)
-            print("Black")
+            # print("The best move gives value", value)
+            # print("Black")
 
         board.push(move)
         print(board)

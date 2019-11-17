@@ -55,7 +55,7 @@ class SearchAgent(object):
         for moveUCI in board.legal_moves:               # Iterate through all possible moves of all pieces
             move = chess.Move.from_uci( str(moveUCI) )  # Convert the move to the right input
             board.push(move)                            # Execute the move
-            boardValue, foundMove = self.minimax(board, depth -1, not maximizingPlayer)    # Test possible moves for the other player
+            boardValue, foundMove = self.minimax(board, depth - 1, not maximizingPlayer)    # Test possible moves for the other player
 
             if maximizingPlayer:                            # If calculating the best move for the agent
 
@@ -85,7 +85,7 @@ class SearchAgent(object):
             board.push(move)                            # Execute the move
 
             # Test possible moves for the other player
-            boardValue, foundMove = self.AlphaBeta(board, depth -1, alpha, beta, not maximizingPlayer)
+            boardValue, foundMove = self.AlphaBeta(board, depth - 1, alpha, beta, not maximizingPlayer)
 
             if maximizingPlayer:                            # If calculating the best move for the agent
 
