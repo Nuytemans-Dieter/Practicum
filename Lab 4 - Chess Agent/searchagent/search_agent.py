@@ -71,3 +71,40 @@ class SearchAgent(object):
 
             board.pop()                                     # Undo the move
         return bestVal, bestMove                            # Return the value of the best move and the best move
+
+    def AlphaBeta(self, board: chess.Board, depth, alpha, beta, maximizingPlayer):
+        if depth == 0:
+            return evaluate(board), None
+
+        bestMove = None     # This variable will be used to track the best move so far
+        bestVal = None      # This variable will be used to track the board value after the best move so far
+
+        # Find an optimal move
+        for moveUCI in board.legal_moves:               # Iterate through all possible moves of all pieces
+            move = chess.Move.from_uci( str(moveUCI) )  # Convert the move to the right input
+            board.push(move)                            # Execute the move
+
+            # Test possible moves for the other player
+            boardValue, foundMove = self.AlphaBeta(board, depth -1, alpha, beta, not maximizingPlayer)
+
+            if maximizingPlayer:                            # If calculating the best move for the agent
+
+                if bestVal is None or boardValue > bestVal: # If this is the first iteration OR a better move has been found
+                    bestVal = boardValue                    # Update the best move
+                    alpha = boardValue
+
+                if boardValue == bestVal:                   # These are equal if the current move is better
+                    bestMove = move                         # Set the current best move
+            else:
+
+                if bestVal is None or boardValue < bestVal: # If this is the first iteration OR a better move has been found for the opponent
+                    bestVal = boardValue                    # Update the enemy's best move
+                    beta = boardValue
+
+            board.pop()                                     # Undo the move
+
+            if alpha and beta is not None:                  # Alpha and beta both need a value for comparison.
+                if beta <= alpha:                           # White or black already has a better option available to him.
+                    break                                   # Don't process unnecessary nodes. Prune positions.
+
+        return bestVal, bestMove                            # Return the value of the best move and the best move
