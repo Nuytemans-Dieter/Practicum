@@ -74,8 +74,8 @@ class SearchAgent(object):
 
     def AlphaBeta(self, board: chess.Board, depth, alpha, beta, maximizingPlayer):
         if depth == 0 or board.is_checkmate():
-            # return evaluate(board), None
-            return self.quis(board, alpha, beta), None
+            return evaluate(board), None
+            # return self.quis(board, alpha, beta), None
 
         bestMove = None     # This variable will be used to track the best move so far
         bestVal = None      # This variable will be used to track the board value after the best move so far
@@ -104,9 +104,8 @@ class SearchAgent(object):
 
             board.pop()                                     # Undo the move
 
-            if alpha and beta is not None:                  # Alpha and beta both need a value for comparison.
-                if beta <= alpha:                           # White or black already has a better option available to him.
-                    break                                   # Don't process unnecessary nodes. Prune positions.
+            if beta <= alpha:                               # White or black already has a better option available to him.
+                break                                       # Don't process unnecessary nodes. Prune positions.
 
         return bestVal, bestMove                            # Return the value of the best move and the best move
 
