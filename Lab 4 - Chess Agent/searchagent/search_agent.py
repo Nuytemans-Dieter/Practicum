@@ -12,7 +12,7 @@ class SearchAgent(object):
         self.author = "S. Vanneste"
 
     def minimax(self, board: chess.Board, depth, maximizingPlayer):
-        if depth == 0 or board.is_checkmate():
+        if depth == 0 or board.is_game_over():
             return evaluate(board), None
 
         bestMove = None  # This variable will be used to track the best move so far
@@ -40,7 +40,7 @@ class SearchAgent(object):
         return bestVal, bestMove                            # Return the value of the best move and the best move
 
     def AlphaBeta(self, board: chess.Board, depth, alpha, beta, maximizingPlayer):
-        if depth == 0 or board.is_checkmate():
+        if depth == 0 or board.is_game_over():
             # return evaluate(board), None
             return self.quis(board, alpha, beta), None
 
