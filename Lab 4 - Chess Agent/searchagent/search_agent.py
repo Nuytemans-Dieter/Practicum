@@ -1,6 +1,7 @@
 import random
 import chess
 from searchagent.ValueFinder import evaluate
+from searchagent.ValueFinder import getPieceValue
 
 class SearchAgent(object):
 
@@ -74,8 +75,8 @@ class SearchAgent(object):
 
     def AlphaBeta(self, board: chess.Board, depth, alpha, beta, maximizingPlayer):
         if depth == 0 or board.is_checkmate():
-            return evaluate(board), None
-            # return self.quis(board, alpha, beta), None
+            # return evaluate(board), None
+            return self.quis(board, alpha, beta), None
 
         bestMove = None     # This variable will be used to track the best move so far
         bestVal = None      # This variable will be used to track the board value after the best move so far
@@ -111,10 +112,12 @@ class SearchAgent(object):
 
     def quis(self, board: chess.Board(), alpha, beta):
         eval = evaluate(board)
-        if eval >= beta:    # Cutoff: white or black already found a better value.
+        if eval >= beta:            # Cutoff: white or black already found a better value.
             return beta
-
-        if alpha < eval:    # Better move than our last move.
+        delta = getPieceValue('q')  # Queen value.
+        if eval < alpha - delta:    # Delta pruning.
+            return alpha
+        if alpha < eval:            # Better move than our last move.
             alpha = eval
 
         for moveUCI in board.legal_moves:   # For every capture:
@@ -123,7 +126,7 @@ class SearchAgent(object):
                 move = chess.Move.from_uci( str(moveUCI) )
                 board.push(move)
                 score = -self.quis(board, -beta, -alpha)
-                board.pop
+                board.pop()
                 if score >= beta:
                     return beta
                 if score > alpha:
