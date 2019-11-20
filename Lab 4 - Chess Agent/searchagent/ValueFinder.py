@@ -1,5 +1,6 @@
 import chess
-import time
+from time import sleep
+
 
 # Based on Hans Berliner's system
 # See: https://en.wikipedia.org/wiki/Chess_piece_relative_value
@@ -11,6 +12,10 @@ pieceValues = {
     'n': 32,    # Knight /  Paard
     'p': 10,    # Pawn   /  Pion
 }
+
+
+highestPossibleValue = 99999
+
 
 pawnPosValue = [
      0,  0,  0,  0,  0,  0,  0,  0,
@@ -75,10 +80,10 @@ kingPosValue = [
 posValue = [
      1, 1, 1, 1, 1, 1, 1, 1,
      1, 1, 1, 1, 1, 1, 1, 1,
-     2, 2, 2, 2, 2, 2, 2, 2,
+     2, 2, 2, 4, 4, 2, 2, 2,
      2, 2, 4, 5, 5, 4, 2, 2,
      2, 2, 4, 5, 5, 4, 2, 2,
-     2, 2, 2, 2, 2, 2, 2, 2,
+     2, 2, 2, 4, 4, 2, 2, 2,
      1, 1, 1, 1, 1, 1, 1, 1,
      1, 1, 1, 1, 1, 1, 1, 1]
 
@@ -86,8 +91,37 @@ posValue = [
 # Starting position: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
 opening = chess.Board('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1')
 
-
 def evaluate(board):
+    if board.is_checkmate():
+        if board.turn:
+            return -999999
+        else:
+            return 999999
+
+    totalValue = 0
+    # Count the number of pieces
+    whitePieces = dict()
+    whitePieces['q'] = len(board.pieces(chess.QUEEN, chess.WHITE))
+    whitePieces['r'] = len(board.pieces(chess.ROOK, chess.WHITE))
+    whitePieces['b'] = len(board.pieces(chess.BISHOP, chess.WHITE))
+    whitePieces['n'] = len(board.pieces(chess.KNIGHT, chess.WHITE))
+    whitePieces['p'] = len(board.pieces(chess.PAWN, chess.WHITE))
+
+    return totalValue
+
+
+
+
+def evaluate2(board):
+
+    if not board.is_valid():
+        return -highestPossibleValue
+
+    if board.is_checkmate():
+        if board.turn:
+            return -highestPossibleValue
+        else:
+            return highestPossibleValue
 
     totalValue = 0
     # print("---")
