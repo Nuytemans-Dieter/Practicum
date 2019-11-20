@@ -3,6 +3,7 @@ import chess
 import chess.engine
 from searchagent.search_agent import SearchAgent
 from searchagent.ValueFinder import evaluate
+import time
 
 def main():
     board = chess.Board()
@@ -18,18 +19,26 @@ def main():
         move = None
 
         if turn_white_player:
+            start = time.time()
+
             # value, move = white_player.minimax(board, 3, turn_white_player)
             value, move = white_player.AlphaBeta(board, 3, -inf, inf, turn_white_player)
             print("The current board value is", evaluate(board))
             print("The best move gives value", value)
             turn_white_player = False
 
+            end = time.time()
         else:
+            start = time.time()
+
             move = black_player.play(board, limit).move
             turn_white_player = True
 
+            end = time.time()
+
         board.push(move)
         print("The value after moving is", evaluate(board))
+        print("This turn took", round((end - start) * 1000, 2), "milliseconds")
         print(board)
         print("###########################")
 
