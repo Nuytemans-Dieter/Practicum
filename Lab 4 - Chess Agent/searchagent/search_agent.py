@@ -133,7 +133,3 @@ class SearchAgent(object):
                     best_move = move
 
         return best_move
-
-    def valueIteration(self):
-
-

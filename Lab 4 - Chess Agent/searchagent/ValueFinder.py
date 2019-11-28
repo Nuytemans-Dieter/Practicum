@@ -5,17 +5,83 @@ from time import sleep
 # Based on Hans Berliner's system
 # See: https://en.wikipedia.org/wiki/Chess_piece_relative_value
 pieceValues = {
-    'k': 9000,  # King   /  Koning
+    # WHITE piece values
+    #'k': 9000,  # King   /  Koning
     'q': 88,    # Queen  /  Koningin
     'r': 51,    # Rook   /  Toren
     'b': 33,    # Bishop /  Loper
     'n': 32,    # Knight /  Paard
     'p': 10,    # Pawn   /  Pion
+    # BLACK piece values
+    #'K': 9000,  # King   /  Koning
+    'Q': -88,    # Queen  /  Koningin
+    'R': -51,    # Rook   /  Toren
+    'B': -33,    # Bishop /  Loper
+    'N': -32,    # Knight /  Paard
+    'P': -10,    # Pawn   /  Pion
 }
 
+maxValue = 999999
 
-highestPossibleValue = 99999
+pieces = ['q', 'r', 'b', 'n', 'p']
 
+posValue = [
+     1, 1, 1, 1, 1, 1, 1, 1,
+     1, 1, 1, 1, 1, 1, 1, 1,
+     2, 2, 2, 4, 4, 2, 2, 2,
+     2, 2, 4, 5, 5, 4, 2, 2,
+     2, 2, 4, 5, 5, 4, 2, 2,
+     2, 2, 2, 4, 4, 2, 2, 2,
+     1, 1, 1, 1, 1, 1, 1, 1,
+     1, 1, 1, 1, 1, 1, 1, 1]
+
+# Openings in FEN notation
+# Starting position: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+opening = chess.Board('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1')
+
+
+# Useful functions:
+# - a position is an int in [0, 64[
+# - board.piece_at( position )
+# - board.attacks( position )
+# A piece is received from the second item in this list
+# - piece.color
+
+def evaluate(board):
+
+    if board.is_checkmate():
+        if board.turn:
+            return -maxValue
+        else:
+            return maxValue
+
+    totalValue = 0
+
+    # Count the number of white pieces
+    numPieces = dict()
+    numPieces['q'] = len(board.pieces( chess.QUEEN,  chess.WHITE))
+    numPieces['r'] = len(board.pieces( chess.ROOK,   chess.WHITE))
+    numPieces['b'] = len(board.pieces( chess.BISHOP, chess.WHITE))
+    numPieces['n'] = len(board.pieces( chess.KNIGHT, chess.WHITE))
+    numPieces['p'] = len(board.pieces( chess.PAWN,   chess.WHITE))
+
+    # Count the number of black pieces
+    numPieces['Q'] = len(board.pieces( chess.QUEEN,  chess.BLACK))
+    numPieces['R'] = len(board.pieces( chess.ROOK,   chess.BLACK))
+    numPieces['B'] = len(board.pieces( chess.BISHOP, chess.BLACK))
+    numPieces['N'] = len(board.pieces( chess.KNIGHT, chess.BLACK))
+    numPieces['P'] = len(board.pieces( chess.PAWN,   chess.BLACK))
+
+
+    for piece in pieces:
+        num = numPieces.get(piece) - numPieces.get(piece.upper())
+        totalValue += num * getPieceValue(piece)
+
+    return totalValue
+
+# Get the value of the piece
+def getPieceValue(piece):
+    return pieceValues.get(piece, 0)
 
 pawnPosValue = [
      0,  0,  0,  0,  0,  0,  0,  0,
@@ -76,78 +142,3 @@ kingPosValue = [
     -30,-40,-40,-50,-50,-40,-40,-30,
     -30,-40,-40,-50,-50,-40,-40,-30,
     -30,-40,-40,-50,-50,-40,-40,-30]
-
-posValue = [
-     1, 1, 1, 1, 1, 1, 1, 1,
-     1, 1, 1, 1, 1, 1, 1, 1,
-     2, 2, 2, 4, 4, 2, 2, 2,
-     2, 2, 4, 5, 5, 4, 2, 2,
-     2, 2, 4, 5, 5, 4, 2, 2,
-     2, 2, 2, 4, 4, 2, 2, 2,
-     1, 1, 1, 1, 1, 1, 1, 1,
-     1, 1, 1, 1, 1, 1, 1, 1]
-
-# Openings in FEN notation
-# Starting position: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
-opening = chess.Board('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1')
-
-def evaluate(board):
-    if board.is_checkmate():
-        if board.turn:
-            return -999999
-        else:
-            return 999999
-
-    totalValue = 0
-    # Count the number of pieces
-    whitePieces = dict()
-    whitePieces['q'] = len(board.pieces(chess.QUEEN, chess.WHITE))
-    whitePieces['r'] = len(board.pieces(chess.ROOK, chess.WHITE))
-    whitePieces['b'] = len(board.pieces(chess.BISHOP, chess.WHITE))
-    whitePieces['n'] = len(board.pieces(chess.KNIGHT, chess.WHITE))
-    whitePieces['p'] = len(board.pieces(chess.PAWN, chess.WHITE))
-
-    return totalValue
-
-
-
-
-def evaluate2(board):
-
-    if not board.is_valid():
-        return -highestPossibleValue
-
-    if board.is_checkmate():
-        if board.turn:
-            return -highestPossibleValue
-        else:
-            return highestPossibleValue
-
-    totalValue = 0
-    # print("---")
-    # print(board)
-    # print("---")
-    # sleep(0.1)  # Time in seconds
-
-
-    for position in range(0,64):            # Loop through the board
-        piece = board.piece_at( position )  # Get a piece
-        if piece != None:
-
-            isWhite = bool( piece.color )   # Get the piece owner
-
-            value = getPieceValue( str(piece) )         # Convert the piece to a value
-            numAttacks = len(board.attacks( position )) # get the number of attacks this piece can do
-
-            if isWhite:                    # White pieces are considered positive
-                totalValue += value
-                totalValue += numAttacks
-            else:                          # Black pieces are considered negative
-                totalValue -= value
-                totalValue -= numAttacks
-
-    return totalValue
-
-# Get the value of the piece
-def getPieceValue(piece):
-    return pieceValues.get(piece.lower(), 0)
