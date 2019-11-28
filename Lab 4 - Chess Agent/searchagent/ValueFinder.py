@@ -1,6 +1,8 @@
 import chess
 from time import sleep
 
+maxValue = 999999                   # The max value to be returned from the evaluation function
+pieces = ['q', 'r', 'b', 'n', 'p']  # A list of all chess pieces
 
 # Based on Hans Berliner's system
 # See: https://en.wikipedia.org/wiki/Chess_piece_relative_value
@@ -21,10 +23,6 @@ pieceValues = {
     'P': -10,    # Pawn   /  Pion
 }
 
-maxValue = 999999
-
-pieces = ['q', 'r', 'b', 'n', 'p']
-
 posValue = [
      1, 1, 1, 1, 1, 1, 1, 1,
      1, 1, 1, 1, 1, 1, 1, 1,
@@ -37,18 +35,25 @@ posValue = [
 
 # Openings in FEN notation
 # Starting position: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
-opening = chess.Board('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1')
+# opening = chess.Board('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1')
 
 
 # Useful functions:
 # - a position is an int in [0, 64[
-# - board.piece_at( position )
-# - board.attacks( position )
+# - board.piece_at( position )                          -> Get the piece at a location
+# - board.attacks( position )                           -> Get the attacked fields for the piece on the given position
 # A piece is received from the second item in this list
-# - piece.color
+# - bool(piece.color)                                   -> Get if the piece color is white
+# - board.turn                                          -> Check if it is white's turn
+# - board.is_checkmate()                                -> Check if the board is in checkmate
+# A piece type is for example Chess.QUEEN, a pieceColor is chess.WHITE or chess.BLACK
+# - board.pieces( pieceType,  pieceColor)               -> Get the position of all pieces of these types
+# - len(board.pieces( pieceType,  pieceColor))          -> Get the amount of all pieces of these types
 
 def evaluate(board):
 
+    # If checkmate on white: return -maxValue   -> Would be a loss! (and an illegal move at that!)
+    # else white wins: return maxValue          -> Will be a win!
     if board.is_checkmate():
         if board.turn:
             return -maxValue
@@ -57,7 +62,7 @@ def evaluate(board):
 
     totalValue = 0
 
-    # Count the number of white pieces
+    # Count the number of white pieces currently on the board
     numPieces = dict()
     numPieces['q'] = len(board.pieces( chess.QUEEN,  chess.WHITE))
     numPieces['r'] = len(board.pieces( chess.ROOK,   chess.WHITE))
@@ -65,17 +70,17 @@ def evaluate(board):
     numPieces['n'] = len(board.pieces( chess.KNIGHT, chess.WHITE))
     numPieces['p'] = len(board.pieces( chess.PAWN,   chess.WHITE))
 
-    # Count the number of black pieces
+    # Count the number of black pieces currently on the board
     numPieces['Q'] = len(board.pieces( chess.QUEEN,  chess.BLACK))
     numPieces['R'] = len(board.pieces( chess.ROOK,   chess.BLACK))
     numPieces['B'] = len(board.pieces( chess.BISHOP, chess.BLACK))
     numPieces['N'] = len(board.pieces( chess.KNIGHT, chess.BLACK))
     numPieces['P'] = len(board.pieces( chess.PAWN,   chess.BLACK))
 
-
+    # Loop all possible pieces: ['q', 'r', 'b', 'n', 'p']
     for piece in pieces:
-        num = numPieces.get(piece) - numPieces.get(piece.upper())
-        totalValue += num * getPieceValue(piece)
+        num = numPieces.get(piece) - numPieces.get(piece.upper())   # Get # white pieces - # black pieces
+        totalValue += num * getPieceValue(piece)                    # Add the value multiplied with the piece value to the total board value
 
     return totalValue
 
