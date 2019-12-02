@@ -54,6 +54,7 @@ posValue = {
 
 def evaluate(board):
 
+
     # If checkmate on white: return -maxValue   -> Would be a loss! (and an illegal move at that!)
     # else white wins: return maxValue          -> Will be a win!
     if board.is_checkmate():
@@ -68,8 +69,10 @@ def evaluate(board):
     totalValue = 0
 
     for position in chess.SQUARES:                  # Loop all board positions
+        numAttacks = len(board.attacks(position))   # Get the number of attacked squares by this piece
+        totalValue += numAttacks                    # Add the number of attacked fields
+
         piece = board.piece_at( position )          # Get the piece at each position
-        totalValue += len( posValue.intersection( board.attacks(position) ) ) # Get the number of attacked fields
         totalValue += getPosValue(piece, position)  # Get the value of this position
 
     return totalValue
