@@ -23,7 +23,7 @@ pieceValues = {
     'p': -10,    # Pawn   /  Pion
 }
 
-posValue = [
+posValue = {
      1, 1, 1, 1, 1, 1, 1, 1,
      1, 1, 1, 1, 1, 1, 1, 1,
      2, 2, 2, 4, 4, 2, 2, 2,
@@ -31,7 +31,9 @@ posValue = [
      2, 2, 4, 5, 5, 4, 2, 2,
      2, 2, 2, 4, 4, 2, 2, 2,
      1, 1, 1, 1, 1, 1, 1, 1,
-     1, 1, 1, 1, 1, 1, 1, 1]
+     1, 1, 1, 1, 1, 1, 1, 1}
+
+
 
 # Openings in FEN notation
 # Starting position: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
@@ -60,30 +62,14 @@ def evaluate(board):
         else:
             return maxValue
 
+    if board.is_stalemate():
+        return 0
+
     totalValue = 0
 
-    # Count the number of white pieces currently on the board
-    #numPieces = dict()
-    #numPieces['Q'] = len(board.pieces( chess.QUEEN,  chess.WHITE))
-    #numPieces['R'] = len(board.pieces( chess.ROOK,   chess.WHITE))
-    #numPieces['B'] = len(board.pieces( chess.BISHOP, chess.WHITE))
-    #numPieces['N'] = len(board.pieces( chess.KNIGHT, chess.WHITE))
-    #numPieces['P'] = len(board.pieces( chess.PAWN,   chess.WHITE))
-
-    # Count the number of black pieces currently on the board
-    #numPieces['q'] = len(board.pieces( chess.QUEEN,  chess.BLACK))
-    #numPieces['r'] = len(board.pieces( chess.ROOK,   chess.BLACK))
-    #numPieces['b'] = len(board.pieces( chess.BISHOP, chess.BLACK))
-    #numPieces['n'] = len(board.pieces( chess.KNIGHT, chess.BLACK))
-    #numPieces['p'] = len(board.pieces( chess.PAWN,   chess.BLACK))
-
-    # Loop all possible pieces: ['q', 'r', 'b', 'n', 'p']
-    #for piece in pieces:
-    #    num = numPieces.get(piece) - numPieces.get(piece.upper())   # Get num white pieces - num black pieces
-    #    totalValue += num * getPieceValue(piece)                    # Add the value multiplied with the piece value to the total board value
-
-    for position in range (0, 64):                  # Loop all positions
+    for position in chess.SQUARES:                  # Loop all board positions
         piece = board.piece_at( position )          # Get the piece at each position
+        totalValue += len( posValue.intersection( board.attacks(position) ) ) # Get the number of attacked fields
         totalValue += getPosValue(piece, position)  # Get the value of this position
 
     return totalValue
@@ -153,7 +139,7 @@ queenPosValue = [
      -2,  0,  1,  1,  1,  1,  0, -2,
      -1,  0,  1,  1,  1,  1,  0, -1,
      -0,  0,  1,  1,  1,  1,  0, -1,
-     -2,  1,  1,  1,  1,  1,  0, -2,
+     -2,  0,  1,  1,  1,  1,  0, -2,
      -2,  0,  1,  0,  0,  0,  0, -2,
      -4, -2, -2, -1, -1, -2, -2, -4]
 
