@@ -9,18 +9,18 @@ pieces = ['q', 'r', 'b', 'n', 'p']  # A list of all chess pieces
 pieceValues = {
     # WHITE piece values
     #'k': 9000,  # King   /  Koning
-    'Q': 88,    # Queen  /  Koningin
-    'R': 51,    # Rook   /  Toren
-    'B': 33,    # Bishop /  Loper
-    'N': 32,    # Knight /  Paard
-    'P': 10,    # Pawn   /  Pion
+    'Q': 880,    # Queen  /  Koningin
+    'R': 510,    # Rook   /  Toren
+    'B': 330,    # Bishop /  Loper
+    'N': 320,    # Knight /  Paard
+    'P': 100,    # Pawn   /  Pion
     # BLACK piece values
     #'K': 9000,  # King   /  Koning
-    'q': -88,    # Queen  /  Koningin
-    'r': -51,    # Rook   /  Toren
-    'b': -33,    # Bishop /  Loper
-    'n': -32,    # Knight /  Paard
-    'p': -10,    # Pawn   /  Pion
+    'q': -880,    # Queen  /  Koningin
+    'r': -510,    # Rook   /  Toren
+    'b': -330,    # Bishop /  Loper
+    'n': -320,    # Knight /  Paard
+    'p': -100,    # Pawn   /  Pion
 }
 
 posValue = {
