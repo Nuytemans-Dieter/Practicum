@@ -69,11 +69,18 @@ def evaluate(board):
     totalValue = 0
 
     for position in chess.SQUARES:                  # Loop all board positions
-        numAttacks = len(board.attacks(position))   # Get the number of attacked squares by this piece
-        totalValue += numAttacks                    # Add the number of attacked fields
+        piece = board.piece_at(position)  # Get the piece at each position
 
-        piece = board.piece_at( position )          # Get the piece at each position
-        totalValue += getPosValue(piece, position)  # Get the value of this position
+        if piece is not None:             # Make sure a piece is present
+
+            numAttacks = len(board.attacks(position))       # Get the number of attacked squares by this piece
+
+            if piece.color:                                 # If it is white's turn
+                totalValue += numAttacks                    # Add the number of white attacked fields
+            else:                                           # Else
+                totalValue -= numAttacks                    # Subtract the number of black attacked fields
+
+            totalValue += getPosValue(piece, position)  # Get the value of this position
 
     return totalValue
 
