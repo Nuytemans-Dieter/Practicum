@@ -78,9 +78,14 @@ def evaluate(board):
     numPieces['P'] = len(board.pieces( chess.PAWN,   chess.BLACK))
 
     # Loop all possible pieces: ['q', 'r', 'b', 'n', 'p']
-    for piece in pieces:
-        num = numPieces.get(piece) - numPieces.get(piece.upper())   # Get # white pieces - # black pieces
-        totalValue += num * getPieceValue(piece)                    # Add the value multiplied with the piece value to the total board value
+    #for piece in pieces:
+    #    num = numPieces.get(piece) - numPieces.get(piece.upper())   # Get # white pieces - # black pieces
+    #    totalValue += num * getPieceValue(piece)                    # Add the value multiplied with the piece value to the total board value
+
+    for i in range(0,8):
+        for j in range(0,8):
+            piece = board.piece_at(8*i + j)
+            totalValue += getPosValue(piece, i, j)
 
     return totalValue
 
@@ -88,62 +93,108 @@ def evaluate(board):
 def getPieceValue(piece):
     return pieceValues.get(piece, 0)
 
-pawnPosValue = [
-     0,  0,  0,  0,  0,  0,  0,  0,
-     5, 10, 10,-20,-20, 10, 10,  5,
-     5, -5,-10,  0,  0,-10, -5,  5,
-     0,  0,  0, 20, 20,  0,  0,  0,
-     5,  5, 10, 25, 25, 10,  5,  5,
-    10, 10, 20, 30, 30, 20, 10, 10,
-    50, 50, 50, 50, 50, 50, 50, 50,
-     0,  0,  0,  0,  0,  0,  0,  0]
+def getPosValue(piece, x, y):
+    if piece is None:
+        return 0
 
-knightPosValue = [
-    -50,-40,-30,-30,-30,-30,-40,-50,
-    -40,-20,  0,  5,  5,  0,-20,-40,
-    -30,  5, 10, 15, 15, 10,  5,-30,
-    -30,  0, 15, 20, 20, 15,  0,-30,
-    -30,  5, 15, 20, 20, 15,  5,-30,
-    -30,  0, 10, 15, 15, 10,  0,-30,
-    -40,-20,  0,  0,  0,  0,-20,-40,
-    -50,-40,-30,-30,-30,-30,-40,-50]
+    isWhite = bool(piece.color)
+    type = piece.symbol()
 
-bishopPosValue = [
-    -20,-10,-10,-10,-10,-10,-10,-20,
-    -10,  5,  0,  0,  0,  0,  5,-10,
-    -10, 10, 10, 10, 10, 10, 10,-10,
-    -10,  0, 10, 10, 10, 10,  0,-10,
-    -10,  5,  5, 10, 10,  5,  5,-10,
-    -10,  0,  5, 10, 10,  5,  0,-10,
-    -10,  0,  0,  0,  0,  0,  0,-10,
-    -20,-10,-10,-10,-10,-10,-10,-20]
+    if isWhite:
+        if type == 'P':
+            return getPieceValue('p') + pawnPosValueWhite[x][y]
+        if type == 'N':
+            return getPieceValue('k') + knightPosValueWhite[x][y]
+        if type == 'B':
+            return getPieceValue('b') + bishopPosValueWhite[x][y]
+        if type == 'R':
+            return getPieceValue('r') + rookPosValueWhite[x][y]
+        if type == 'Q':
+            return getPieceValue('q') + queenPosValueWhite[x][y]
+        if type == 'K':
+            return kingPosValueWhite[x][y]
+    else:
+        if type == 'p':
+            return getPieceValue('P') + pawnPosValueBlack[x][y]
+        if type == 'n':
+            return getPieceValue('K') + knightPosValueBlack[x][y]
+        if type == 'b':
+            return getPieceValue('B') + bishopPosValueBlack[x][y]
+        if type == 'r':
+            return getPieceValue('R') + rookPosValueBlack[x][y]
+        if type == 'q':
+            return getPieceValue('Q') + queenPosValueBlack[x][y]
+        if type == 'k':
+            return kingPosValueWhite[x][y]
 
-rookPosValue = [
-      0,  0,  0,  5,  5,  0,  0,  0,
-     -5,  0,  0,  0,  0,  0,  0, -5,
-     -5,  0,  0,  0,  0,  0,  0, -5,
-     -5,  0,  0,  0,  0,  0,  0, -5,
-     -5,  0,  0,  0,  0,  0,  0, -5,
-     -5,  0,  0,  0,  0,  0,  0, -5,
-      5, 10, 10, 10, 10, 10, 10,  5,
-     0,  0,  0,  0,  0,  0,  0,  0]
+pawnPosValueWhite = [
+    [ 0,  0,  0,  0,  0,  0,  0,  0],
+    [ 5, 10, 10,-20,-20, 10, 10,  5],
+    [ 5, -5,-10,  0,  0,-10, -5,  5],
+    [ 0,  0,  0, 20, 20,  0,  0,  0],
+    [ 5,  5, 10, 25, 25, 10,  5,  5],
+    [10, 10, 20, 30, 30, 20, 10, 10],
+    [50, 50, 50, 50, 50, 50, 50, 50],
+    [ 0,  0,  0,  0,  0,  0,  0,  0]]
 
-queenPosValue = [
-    -20,-10,-10, -5, -5,-10,-10,-20,
-    -10,  0,  0,  0,  0,  0,  0,-10,
-    -10,  5,  5,  5,  5,  5,  0,-10,
-      0,  0,  5,  5,  5,  5,  0, -5,
-     -5,  0,  5,  5,  5,  5,  0, -5,
-    -10,  0,  5,  5,  5,  5,  0,-10,
-    -10,  0,  0,  0,  0,  0,  0,-10,
-    -20,-10,-10, -5, -5,-10,-10,-20]
+pawnPosValueBlack = pawnPosValueWhite[::-1]
 
-kingPosValue = [
-     20, 30, 10,  0,  0, 10, 30, 20,
-     20, 20,  0,  0,  0,  0, 20, 20,
-    -10,-20,-20,-20,-20,-20,-20,-10,
-    -20,-30,-30,-40,-40,-30,-30,-20,
-    -30,-40,-40,-50,-50,-40,-40,-30,
-    -30,-40,-40,-50,-50,-40,-40,-30,
-    -30,-40,-40,-50,-50,-40,-40,-30,
-    -30,-40,-40,-50,-50,-40,-40,-30]
+knightPosValueWhite = [
+    [-50,-40,-30,-30,-30,-30,-40,-50],
+    [-40,-20,  0,  5,  5,  0,-20,-40],
+    [-30,  5, 10, 15, 15, 10,  5,-30],
+    [-30,  0, 15, 20, 20, 15,  0,-30],
+    [-30,  5, 15, 20, 20, 15,  5,-30],
+    [-30,  0, 10, 15, 15, 10,  0,-30],
+    [-40,-20,  0,  0,  0,  0,-20,-40],
+    [-50,-40,-30,-30,-30,-30,-40,-50]]
+
+knightPosValueBlack = knightPosValueWhite[::-1]
+
+bishopPosValueWhite = [
+    [-20,-10,-10,-10,-10,-10,-10,-20],
+    [-10,  5,  0,  0,  0,  0,  5,-10],
+    [-10, 10, 10, 10, 10, 10, 10,-10],
+    [-10,  0, 10, 10, 10, 10,  0,-10],
+    [-10,  5,  5, 10, 10,  5,  5,-10],
+    [-10,  0,  5, 10, 10,  5,  0,-10],
+    [-10,  0,  0,  0,  0,  0,  0,-10],
+    [-20,-10,-10,-10,-10,-10,-10,-20]]
+
+bishopPosValueBlack = bishopPosValueWhite[::-1]
+
+rookPosValueWhite = [
+     [ 0,  0,  0,  5,  5,  0,  0,  0],
+     [-5,  0,  0,  0,  0,  0,  0, -5],
+     [-5,  0,  0,  0,  0,  0,  0, -5],
+     [-5,  0,  0,  0,  0,  0,  0, -5],
+     [-5,  0,  0,  0,  0,  0,  0, -5],
+     [-5,  0,  0,  0,  0,  0,  0, -5],
+     [ 5, 10, 10, 10, 10, 10, 10,  5],
+     [ 0,  0,  0,  0,  0,  0,  0,  0]]
+
+rookPosValueBlack = rookPosValueWhite[::-1]
+
+queenPosValueWhite = [
+    [-20,-10,-10, -5, -5,-10,-10,-20],
+    [-10,  0,  0,  0,  0,  0,  0,-10],
+    [-10,  5,  5,  5,  5,  5,  0,-10],
+    [  0,  0,  5,  5,  5,  5,  0, -5],
+    [ -5,  0,  5,  5,  5,  5,  0, -5],
+    [-10,  0,  5,  5,  5,  5,  0,-10],
+    [-10,  0,  0,  0,  0,  0,  0,-10],
+    [-20,-10,-10, -5, -5,-10,-10,-20]]
+
+queenPosValueBlack = queenPosValueWhite[::-1]
+
+kingPosValueWhite = [
+    [ 20, 30, 10,  0,  0, 10, 30, 20],
+    [ 20, 20,  0,  0,  0,  0, 20, 20],
+    [-10,-20,-20,-20,-20,-20,-20,-10],
+    [-20,-30,-30,-40,-40,-30,-30,-20],
+    [-30,-40,-40,-50,-50,-40,-40,-30],
+    [-30,-40,-40,-50,-50,-40,-40,-30],
+    [-30,-40,-40,-50,-50,-40,-40,-30],
+    [-30,-40,-40,-50,-50,-40,-40,-30]]
+
+kingPosValueBlack = kingPosValueWhite[::-1]

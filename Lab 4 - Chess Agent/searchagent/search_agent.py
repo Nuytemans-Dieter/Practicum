@@ -41,8 +41,8 @@ class SearchAgent(object):
 
     def AlphaBeta(self, board: chess.Board, depth, alpha, beta, maximizingPlayer):
         if depth == 0 or board.is_game_over():
-            # return evaluate(board), None
-            return self.quis(board, alpha, beta), None
+            return evaluate(board), None
+            # return self.quis(board, alpha, beta), None
 
         bestMove = None     # This variable will be used to track the best move so far
         bestVal = None      # This variable will be used to track the board value after the best move so far
@@ -50,10 +50,16 @@ class SearchAgent(object):
         # Find an optimal move
         for moveUCI in board.legal_moves:               # Iterate through all possible moves of all pieces
             move = chess.Move.from_uci( str(moveUCI) )  # Convert the move to the right input
+            # print("Depth: ", depth)                   # Print information to test algorithm.
+            # print("Push move: ", move)
+            # print(" ")
             board.push(move)                            # Execute the move
 
             # Test possible moves for the other player
             boardValue, foundMove = self.AlphaBeta(board, depth - 1, alpha, beta, not maximizingPlayer)
+            # print("Move: ", move)
+            # print("Value: ", boardValue)
+            # print(" ")
 
             if maximizingPlayer:                            # If calculating the best move for the agent
 
@@ -74,6 +80,9 @@ class SearchAgent(object):
             if beta <= alpha:                               # White or black already has a better option available to him.
                 break                                       # Don't process unnecessary nodes. Prune positions.
 
+        # print("Depth: ", depth)
+        # print("Best value: ", bestVal)
+        # print("Best move: ", bestMove)
         return bestVal, bestMove                            # Return the value of the best move and the best move
 
     def quis(self, board: chess.Board(), alpha, beta):
