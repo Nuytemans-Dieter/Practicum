@@ -9,7 +9,7 @@ def main():
     board = chess.Board()
     white_player = SearchAgent(time_limit=5)
     black_player = chess.engine.SimpleEngine.popen_uci("stockfish")
-    limit = chess.engine.Limit(time=5.0)
+    limit = chess.engine.Limit(time=0.1)
 
     inf = float('inf')
     running = True
