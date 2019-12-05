@@ -10,6 +10,9 @@ def main():
     board = chess.Board()
     engine = chess.engine.SimpleEngine.popen_uci("stockfish")
 
+    boardData = []
+    valueData = []
+
     white_player = SearchAgent(time_limit=5)
     black_player = engine
     limit = chess.engine.Limit(time=0.1)
@@ -44,9 +47,12 @@ def main():
         #print("This turn took", round((end - start) * 1000, 2), "milliseconds")
         #print(board)
 
-        print(' '.join( QuantifyBoard(board) ))
+        # Keep track of the data
         info = engine.analyse(board, chess.engine.Limit(time=0.1))
-        print(info["score"].white().score())
+
+        boardData.append(QuantifyBoard(board))
+        valueData.append(info["score"].white().score())
+
         #print("###########################")
 
         if board.is_checkmate():
@@ -56,6 +62,23 @@ def main():
                 print("Stockfish wins!")
             else:
                 print("{} wins!".format(white_player.name))
+
+            print("Saving board data...")
+
+            boards = open("newBoardData.txt", "a")
+            for b in boardData:
+                boards.write(str(b) + "\n")
+            boards.close()
+
+            print("Done!")
+            print("Saving value data...")
+
+            values = open("newValueData.txt", "a")
+            for val in valueData:
+                values.write(str(val) + "\n")
+            values.close()
+
+            print("Done!")
 
         if board.is_stalemate():
             running = False
