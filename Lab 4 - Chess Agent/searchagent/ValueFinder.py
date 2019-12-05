@@ -52,8 +52,8 @@ posValue = {
 # - board.pieces( pieceType,  pieceColor)               -> Get the position of all pieces of these types
 # - len(board.pieces( pieceType,  pieceColor))          -> Get the amount of all pieces of these types
 
+# This function uses our own custom made evaluation function
 def evaluate(board):
-
 
     # If checkmate on white: return -maxValue   -> Would be a loss! (and an illegal move at that!)
     # else white wins: return maxValue          -> Will be a win!
@@ -87,9 +87,10 @@ def evaluate(board):
 engine = chess.engine.SimpleEngine.popen_uci("stockfish")
 stockfish_time = 0.01
 
+# This function uses Stockfish' evaluation function for a set time and returns the value (PoV: White player)
 def stockfishEvaluate(board):
     #Use the Stockfish engine  to find a board value for white
-    info = engine.analyse(board, chess.engine.Limit(stockfish_time)
+    info = engine.analyse(board, chess.engine.Limit(stockfish_time))
     print(info["score"])
     return info["score"].white().score()
 

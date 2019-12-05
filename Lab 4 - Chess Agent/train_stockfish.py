@@ -3,6 +3,7 @@ import chess
 import chess.engine
 from searchagent.search_agent import SearchAgent
 from searchagent.ValueFinder import evaluate
+from searchagent.neural_network_util import QuantifyBoard
 import time
 
 def main():
@@ -44,6 +45,7 @@ def main():
         print(board)
         info = engine.analyse(board, chess.engine.Limit(time=0.1))
         print("Stockfish board value:", info["score"])
+        print(QuantifyBoard(board))
         print("###########################")
 
         if board.is_checkmate():
