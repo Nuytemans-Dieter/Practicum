@@ -84,6 +84,15 @@ def evaluate(board):
 
     return totalValue
 
+engine = chess.engine.SimpleEngine.popen_uci("stockfish")
+stockfish_time = 0.01
+
+def stockfishEvaluate(board):
+    #Use the Stockfish engine  to find a board value for white
+    info = engine.analyse(board, chess.engine.Limit(stockfish_time)
+    print(info["score"])
+    return info["score"].white().score()
+
 # Get the value of the piece
 def getPieceValue(piece):
     return pieceValues.get(piece, 0)
