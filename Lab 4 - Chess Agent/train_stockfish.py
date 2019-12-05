@@ -35,9 +35,9 @@ def main():
                 start = time.time()
 
                 # value, move = white_player.minimax(board, 3, turn_white_player)
-                value, move = white_player.AlphaBeta(board, 3, -inf, inf, turn_white_player)
-                #print("The current board value is", evaluate(board))
-                #print("The best move gives value", value)
+                #value, move = white_player.AlphaBeta(board, 3, -inf, inf, turn_white_player)
+                move = white_player.random_with_first_level_search(board)
+
                 turn_white_player = False
 
                 end = time.time()
@@ -50,9 +50,8 @@ def main():
                 end = time.time()
 
             board.push(move)
-            #print("The value after moving is", evaluate(board))
             #print("This turn took", round((end - start) * 1000, 2), "milliseconds")
-            #print(board)
+            print(board)
 
             # Keep track of the data
             info = engine.analyse(board, chess.engine.Limit(time=0.1))
@@ -60,7 +59,7 @@ def main():
             boardData.append(QuantifyBoard(board))
             valueData.append(info["score"].white().score())
 
-            #print("###########################")
+            print("###########################")
 
             if board.is_checkmate():
                 running = False
