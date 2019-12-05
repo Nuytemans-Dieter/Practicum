@@ -7,8 +7,10 @@ import time
 
 def main():
     board = chess.Board()
+    engine = chess.engine.SimpleEngine.popen_uci("stockfish")
+
     white_player = SearchAgent(time_limit=5)
-    black_player = chess.engine.SimpleEngine.popen_uci("stockfish")
+    black_player = engine
     limit = chess.engine.Limit(time=0.1)
 
     inf = float('inf')
@@ -40,6 +42,8 @@ def main():
         print("The value after moving is", evaluate(board))
         print("This turn took", round((end - start) * 1000, 2), "milliseconds")
         print(board)
+        info = engine.analyse(board, chess.engine.Limit(time=0.1))
+        print("Stockfish board value:", info["score"])
         print("###########################")
 
         if board.is_checkmate():
