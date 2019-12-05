@@ -26,8 +26,8 @@ def main():
 
             # value, move = white_player.minimax(board, 3, turn_white_player)
             value, move = white_player.AlphaBeta(board, 3, -inf, inf, turn_white_player)
-            print("The current board value is", evaluate(board))
-            print("The best move gives value", value)
+            #print("The current board value is", evaluate(board))
+            #print("The best move gives value", value)
             turn_white_player = False
 
             end = time.time()
@@ -40,13 +40,14 @@ def main():
             end = time.time()
 
         board.push(move)
-        print("The value after moving is", evaluate(board))
-        print("This turn took", round((end - start) * 1000, 2), "milliseconds")
-        print(board)
+        #print("The value after moving is", evaluate(board))
+        #print("This turn took", round((end - start) * 1000, 2), "milliseconds")
+        #print(board)
+
+        print(' '.join( QuantifyBoard(board) ))
         info = engine.analyse(board, chess.engine.Limit(time=0.1))
-        print("Stockfish board value:", info["score"])
-        print(QuantifyBoard(board))
-        print("###########################")
+        print(info["score"].white().score())
+        #print("###########################")
 
         if board.is_checkmate():
             running = False

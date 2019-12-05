@@ -16,7 +16,7 @@ piece_values = {
     'p': -0.1,   # Pawn   /  Pion
 }
 
-# This function will return a flattened version of the board and substitute all pieces for numerical values
+# This function will return a flattened version of the board and substitute all pieces for numerical values (as strings)
 def QuantifyBoard(board):
 
     flatBoard = []
@@ -24,9 +24,9 @@ def QuantifyBoard(board):
         piece = board.piece_at( position )
 
         if piece is None:
-            flatBoard.append(0)
+            flatBoard.append(str(0))
         else:
-            piece_value = piece_values.get(piece.symbol(), 0)
+            piece_value = str(piece_values.get(piece.symbol(), 0))
             flatBoard.append( piece_value )
 
     return flatBoard
