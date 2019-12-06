@@ -11,6 +11,7 @@ import numpy as np
 from searchagent.neural_network_util import QuantifyBoard
 
 model = keras.Sequential()
+highest_value = 0
 
 def prepare_network():
     print("Loading data...")
@@ -42,9 +43,9 @@ def prepare_network():
 
     print("Normalizing data...")
     normValues = []
-    high = max(values, key=abs)         # Get the highest (absolute) number from all values
+    highest_value = max(values, key=abs)# Get the highest (absolute) number from all values
     for val in values:
-      percentage = val / high           # Normalize each element
+      percentage = val / highest_value  # Normalize each element
       normValues.append( percentage )   # Add each normalized value to the new list
 
     values = normValues                 # Overwrite all values by the normalized list
@@ -59,34 +60,41 @@ def prepare_network():
     test_boards = np.array(test_boards)
     train_values = np.array(train_values)
     test_values = np.array(test_values)
+    print(type(test_values[0]))
 
     print("Creating neural network...")
 
 
     model = keras.Sequential([
-        #layers.Input(shape=(None,64)),
-        layers.Dense(256, activation='tanh'),
-        #layers.Conv1D(128, kernel_size=8 ,activation='tanh'),
-        layers.Dense(256, activation='tanh'),
-        layers.Dense(256, activation='tanh'),
-        layers.Dense(1, activation='softmax')
+        layers.Dense(64, input_shape=(64,), activation='relu'),
+        layers.Dense(64, activation='relu'),
+        layers.Dense(64, activation='relu'),
+        layers.Dense(1, activation="linear", input_shape=(1,))
     ])
 
     print("Compiling the model...")
 
+    optimizer = keras.optimizers.RMSprop(0.001)
+
     # For documentation, see https://keras.io/models/model/
-    model.compile(optimizer='adam',
+    model.compile(optimizer=optimizer,
                   loss='mean_squared_error',
-                  metrics=['accuracy'])
+                  metrics=['mean_absolute_error', 'mean_squared_error'])
+
+    model.summary()
 
     print("Training and testing the model...")
 
     model.fit(train_boards, train_values, epochs=3)
 
-    test_loss, test_acc = model.evaluate(test_boards,  test_values, verbose=2)
+    test_loss = model.evaluate(test_boards,  test_values, verbose=2)
     print('\nTest loss (MSE)', test_loss)
+
 
 # Predict a value for a given board
 def predict(board):
     quantified = QuantifyBoard(board)
-    return model.predict(np.array(quantified))
+    #return highest_value * model.predict(np.expand_dims(quantified, axis=0), batch_size=1)[0]
+    npQuantified = np.array(quantified)
+    prediction = model.predict(npQuantified, batch_size=1)[0]
+    return float(prediction)

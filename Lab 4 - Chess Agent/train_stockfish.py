@@ -16,7 +16,8 @@ def main():
     # Train the neural network
     prepare_network()
 
-    numGames = 1
+    numGames = 1                    # Choose the amount of games to be played
+    do_append_data = False          # Choose whether or not to gather and save data
 
     for gameNumber in range(numGames):
 
@@ -72,7 +73,6 @@ def main():
                 offset = int(offset)                                        # Convert the number to an offset
                 value = value - offset                                      # Offset the max value (so that the last move will be the highest value)
 
-            print("value",value)
             valueData.append(value)
 
             print("###########################")
@@ -85,8 +85,8 @@ def main():
                 else:
                     print("{} wins!".format(white_player.name))
 
-                #saveData(boardData, valueData)
-                print(valueData)
+                if do_append_data:
+                    saveData(boardData, valueData)
 
             if board.is_stalemate():
                 running = False
