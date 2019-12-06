@@ -1,7 +1,6 @@
-print("Loading libraries...")
-# TensorFlow and tf.keras
 from tensorflow import keras
-from keras import layers, models
+# noinspection PyUnresolvedReferences
+from tensorflow.keras import layers, models
 from sklearn.model_selection import train_test_split
 
 # Helper libraries
@@ -11,8 +10,7 @@ import numpy as np
 # Local imports
 from searchagent.neural_network_util import QuantifyBoard
 
-model = None
-
+model = keras.Sequential()
 
 def prepare_network():
     print("Loading data...")
@@ -67,11 +65,11 @@ def prepare_network():
 
     model = keras.Sequential([
         #layers.Input(shape=(None,64)),
-        layers.Dense(256, activation='tanh'),
+        keras.layers.Dense(256, activation='tanh'),
         #layers.Conv1D(128, kernel_size=8 ,activation='tanh'),
-        layers.Dense(256, activation='tanh'),
-        layers.Dense(256, activation='tanh'),
-        layers.Dense(256, activation='softmax')
+        keras.Dense(256, activation='tanh'),
+        keras.Dense(256, activation='tanh'),
+        keras.Dense(1, activation='softmax')
     ])
 
     print("Compiling the model...")
@@ -91,4 +89,4 @@ def prepare_network():
 # Predict a value for a given board
 def predict(board):
     quantified = QuantifyBoard(board)
-    return model.predict(quantified)
+    return model.predict(np.array(quantified))
