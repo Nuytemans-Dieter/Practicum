@@ -1,6 +1,7 @@
 import chess
 
 piece_values = {
+    # White pieces
     'K': 1,     # King   /  Koning
     'Q': 0.88,  # Queen  /  Koningin
     'R': 0.51,  # Rook   /  Toren

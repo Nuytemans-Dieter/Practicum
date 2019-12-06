@@ -29,25 +29,18 @@ def main():
         print("Starting game:", gameNumber)
 
         while running:
-            move = None
 
             if turn_white_player:
-                start = time.time()
-
-                # value, move = white_player.minimax(board, 3, turn_white_player)
+                #start = time.time()
                 #value, move = white_player.AlphaBeta(board, 3, -inf, inf, turn_white_player)
                 move = white_player.random_with_first_level_search(board)
-
                 turn_white_player = False
-
-                end = time.time()
+                #end = time.time()
             else:
-                start = time.time()
-
+                #start = time.time()
                 move = black_player.play(board, limit).move
                 turn_white_player = True
-
-                end = time.time()
+                #end = time.time()
 
             board.push(move)
             #print("This turn took", round((end - start) * 1000, 2), "milliseconds")
@@ -55,7 +48,6 @@ def main():
 
             # Keep track of the data
             info = engine.analyse(board, chess.engine.Limit(time=0.1))
-
             boardData.append(QuantifyBoard(board))
             valueData.append(info["score"].white().score())
 
@@ -69,19 +61,7 @@ def main():
                 else:
                     print("{} wins!".format(white_player.name))
 
-                print("Saving board data...")
-
-                boards = open("boardData.txt", "a")
-                for b in boardData:
-                    boards.write(str(b) + "\n")
-                boards.close()
-
-                print("Saving value data...")
-
-                values = open("valueData.txt", "a")
-                for val in valueData:
-                    values.write(str(val) + "\n")
-                values.close()
+                saveData(boardData, valueData)
 
 
             if board.is_stalemate():
@@ -90,6 +70,22 @@ def main():
 
         black_player.quit()
 
+
+# Append training data to boardData.txt and valueData.txt
+def saveData(boardData, valueData):
+    print("Saving board data...")
+
+    boards = open("boardData.txt", "a")
+    for b in boardData:
+        boards.write(str(b) + "\n")
+    boards.close()
+
+    print("Saving value data...")
+
+    values = open("valueData.txt", "a")
+    for val in valueData:
+        values.write(str(val) + "\n")
+    values.close()
 
 if __name__ == "__main__":
     main()
