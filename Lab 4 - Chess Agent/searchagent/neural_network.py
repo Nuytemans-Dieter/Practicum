@@ -65,11 +65,11 @@ def prepare_network():
 
     model = keras.Sequential([
         #layers.Input(shape=(None,64)),
-        keras.layers.Dense(256, activation='tanh'),
+        layers.Dense(256, activation='tanh'),
         #layers.Conv1D(128, kernel_size=8 ,activation='tanh'),
-        keras.Dense(256, activation='tanh'),
-        keras.Dense(256, activation='tanh'),
-        keras.Dense(1, activation='softmax')
+        layers.Dense(256, activation='tanh'),
+        layers.Dense(256, activation='tanh'),
+        layers.Dense(1, activation='softmax')
     ])
 
     print("Compiling the model...")
