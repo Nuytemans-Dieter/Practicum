@@ -41,8 +41,8 @@ def main():
 
             if turn_white_player:
                 #start = time.time()
-                #value, move = white_player.AlphaBeta(board, 3, -inf, inf, turn_white_player)
-                move = white_player.random_with_first_level_search(board)
+                value, move = white_player.AlphaBeta(board, 3, -inf, inf, turn_white_player)
+                #move = white_player.random_with_first_level_search(board)
                 turn_white_player = False
                 #end = time.time()
             else:
