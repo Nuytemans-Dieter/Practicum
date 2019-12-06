@@ -1,5 +1,5 @@
 import chess
-from time import sleep
+import searchagent.neural_network as neuralNetwork
 
 maxValue = 999999                   # The max value to be returned from the evaluation function
 pieces = ['q', 'r', 'b', 'n', 'p']  # A list of all chess pieces
@@ -52,9 +52,17 @@ posValue = {
 # - board.pieces( pieceType,  pieceColor)               -> Get the position of all pieces of these types
 # - len(board.pieces( pieceType,  pieceColor))          -> Get the amount of all pieces of these types
 
-# This function uses our own custom made evaluation function
+# Evaluate the board with any of the supported methods
 def evaluate(board):
+    #return manualEvaluate(board)
+    return MLevaluate(board)
 
+# Use machine learning to evaluate the board
+def MLevaluate(board):
+    return neuralNetwork.predict(board)
+
+# This function uses our own custom made evaluation function
+def manualEvaluate(board):
     # If checkmate on white: return -maxValue   -> Would be a loss! (and an illegal move at that!)
     # else white wins: return maxValue          -> Will be a win!
     if board.is_checkmate():
@@ -68,22 +76,21 @@ def evaluate(board):
 
     totalValue = 0
 
-    for position in chess.SQUARES:                  # Loop all board positions
+    for position in chess.SQUARES:  # Loop all board positions
         piece = board.piece_at(position)  # Get the piece at each position
 
-        if piece is not None:             # Make sure a piece is present
+        if piece is not None:  # Make sure a piece is present
 
-            numAttacks = len(board.attacks(position))       # Get the number of attacked squares by this piece
+            numAttacks = len(board.attacks(position))  # Get the number of attacked squares by this piece
 
-            if piece.color:                                 # If it is white's turn
-                totalValue += numAttacks                    # Add the number of white attacked fields
-            else:                                           # Else
-                totalValue -= numAttacks                    # Subtract the number of black attacked fields
+            if piece.color:  # If it is white's turn
+                totalValue += numAttacks  # Add the number of white attacked fields
+            else:  # Else
+                totalValue -= numAttacks  # Subtract the number of black attacked fields
 
             totalValue += getPosValue(piece, position)  # Get the value of this position
 
     return totalValue
-
 engine = chess.engine.SimpleEngine.popen_uci("stockfish")
 stockfish_time = 0.01
 

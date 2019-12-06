@@ -1,14 +1,22 @@
 #!/usr/bin/python3
+# Import libraries
 import chess
 import chess.engine
+import tensorflow as ts
+import time
+
+# Local imports
 from searchagent.search_agent import SearchAgent
 from searchagent.ValueFinder import evaluate
 from searchagent.neural_network_util import QuantifyBoard
-import time
+from searchagent.neural_network import prepare_network
 
 def main():
 
-    numGames = 10
+    # Train the neural network
+    prepare_network()
+
+    numGames = 1
 
     for gameNumber in range(numGames):
 
@@ -47,9 +55,25 @@ def main():
             print(board)
 
             # Keep track of the data
-            info = engine.analyse(board, chess.engine.Limit(time=0.1))
-            boardData.append(QuantifyBoard(board))
-            valueData.append(info["score"].white().score())
+            info = engine.analyse(board, chess.engine.Limit(time=0.3))      # Analyse for a specified time period
+            boardData.append(QuantifyBoard(board))                          # Add a quantified version of the board to the data
+            valueStr = info["score"].white()                                # Get the score for white's perspective
+
+            print("SF:", valueStr)
+            print("ML:", evaluate(board))
+
+            value = valueStr.score()                                        # Convert to a score
+            if value is None:                                               # If someone is winning in x moves
+                if '-' in str(valueStr):                                    # If black is winning
+                    value = -5000                                           # Set the value to the minimum value
+                else:
+                    value = 5000                                            # If white is winning: set the value to the maximum value
+                offset = str(valueStr).strip('#')                           # Remove the hash symbol from the value
+                offset = int(offset)                                        # Convert the number to an offset
+                value = value - offset                                      # Offset the max value (so that the last move will be the highest value)
+
+            print("value",value)
+            valueData.append(value)
 
             print("###########################")
 
@@ -61,14 +85,13 @@ def main():
                 else:
                     print("{} wins!".format(white_player.name))
 
-                saveData(boardData, valueData)
-
+                #saveData(boardData, valueData)
+                print(valueData)
 
             if board.is_stalemate():
                 running = False
                 print("Stalemate")
 
-        black_player.quit()
 
 
 # Append training data to boardData.txt and valueData.txt
