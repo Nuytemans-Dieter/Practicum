@@ -16,8 +16,10 @@ def main():
     # Train the neural network
     prepare_network()
 
-    numGames = 1                    # Choose the amount of games to be played
-    do_append_data = False          # Choose whether or not to gather and save data
+    # Choose the amount of games to be played
+    numGames = 1
+    # Choose whether or not to gather and save data
+    do_append_data = True
 
     for gameNumber in range(numGames):
 
@@ -29,25 +31,27 @@ def main():
 
         white_player = SearchAgent(time_limit=5)
         black_player = engine
-        limit = chess.engine.Limit(time=0.1)
 
         inf = float('inf')
         running = True
         turn_white_player = True
 
-        print("Starting game:", gameNumber)
+        gameProgress = str(gameNumber+1) + '/' + str(numGames)
+        print("Starting game:", gameProgress)
 
         while running:
 
             if turn_white_player:
                 #start = time.time()
-                value, move = white_player.AlphaBeta(board, 3, -inf, inf, turn_white_player)
+                value, move = white_player.AlphaBeta(board, 2, -inf, inf, turn_white_player)
                 #move = white_player.random_with_first_level_search(board)
+                #move = black_player.play(board, chess.engine.Limit(time=0.1)).move
                 turn_white_player = False
                 #end = time.time()
             else:
                 #start = time.time()
-                move = black_player.play(board, limit).move
+                move = black_player.play(board, chess.engine.Limit(time=0.1)).move
+                #move = white_player.random_with_first_level_search(board)
                 turn_white_player = True
                 #end = time.time()
 
@@ -56,7 +60,7 @@ def main():
             print(board)
 
             # Keep track of the data
-            info = engine.analyse(board, chess.engine.Limit(time=0.3))      # Analyse for a specified time period
+            info = engine.analyse(board, chess.engine.Limit(time=0.5))      # Analyse for a specified time period
             boardData.append(QuantifyBoard(board))                          # Add a quantified version of the board to the data
             valueStr = info["score"].white()                                # Get the score for white's perspective
 
@@ -94,7 +98,7 @@ def main():
 
 
 
-# Append training data to boardData.txt and valueData.txt
+# Append training data to boardDataOld.txt and valueDataOld.txt
 def saveData(boardData, valueData):
     print("Saving board data...")
 
@@ -109,6 +113,8 @@ def saveData(boardData, valueData):
     for val in valueData:
         values.write(str(val) + "\n")
     values.close()
+
+    print("All data is now saved!")
 
 if __name__ == "__main__":
     main()

@@ -2,19 +2,19 @@ import chess
 
 piece_values = {
     # White pieces
-    'K': 1,     # King   /  Koning
-    'Q': 0.88,  # Queen  /  Koningin
-    'R': 0.51,  # Rook   /  Toren
-    'B': 0.33,  # Bishop /  Loper
-    'N': 0.32,  # Knight /  Paard
-    'P': 0.1,   # Pawn   /  Pion
+    'K': 100,     # King   /  Koning
+    'Q': 88,  # Queen  /  Koningin
+    'R': 51,  # Rook   /  Toren
+    'B': 33,  # Bishop /  Loper
+    'N': 32,  # Knight /  Paard
+    'P': 10,   # Pawn   /  Pion
     # Black pieces
-    'k': -1,     # King   /  Koning
-    'q': -0.88,  # Queen  /  Koningin
-    'r': -0.51,  # Rook   /  Toren
-    'b': -0.33,  # Bishop /  Loper
-    'n': -0.32,  # Knight /  Paard
-    'p': -0.1,   # Pawn   /  Pion
+    'k': -100,     # King   /  Koning
+    'q': -88,  # Queen  /  Koningin
+    'r': -51,  # Rook   /  Toren
+    'b': -33,  # Bishop /  Loper
+    'n': -32,  # Knight /  Paard
+    'p': -1,   # Pawn   /  Pion
 }
 
 # This function will return a flattened version of the board and substitute all pieces for numerical values (as strings)
