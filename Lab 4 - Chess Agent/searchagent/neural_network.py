@@ -60,15 +60,21 @@ def prepare_network():
     test_boards = np.array(test_boards)
     train_values = np.array(train_values)
     test_values = np.array(test_values)
-    print(type(test_values[0]))
+
+    train_boards = np.expand_dims(train_boards, axis=0)
+    test_boards = np.expand_dims(test_boards, axis=0)
+    train_values = np.expand_dims(train_values, axis=0)
+    test_values = np.expand_dims(test_values, axis=0)
+
+    print(train_boards)
+    print(train_values)
 
     print("Creating neural network...")
-
-
     model = keras.Sequential([
-        layers.Dense(256, input_shape=(64,), activation='relu'),
+        layers.Dense(256, input_shape=(None, 8, 8), activation='relu'),
         layers.Dense(256, activation='relu'),
-        layers.Dense(1, activation="linear")
+        layers.Dense(256, activation='relu'),
+        layers.Dense(1, activation='linear'),
     ])
 
     print("Compiling the model...")
@@ -77,14 +83,14 @@ def prepare_network():
 
     # For documentation, see https://keras.io/models/model/
     model.compile(optimizer=optimizer,
-                  loss='mean_squared_error',
-                  metrics=['mean_absolute_error', 'mean_squared_error'])
-
-    model.summary()
+                  loss='mean_absolute_error',
+                  metrics=['mean_absolute_error'])
 
     print("Training and testing the model...")
 
-    model.fit(train_boards, train_values, epochs=3)
+    model.fit(train_boards, train_values, epochs=10)
+
+    model.summary()
 
     test_loss = model.evaluate(test_boards,  test_values, verbose=2)
     print('\nTest loss (MSE)', test_loss)
@@ -95,5 +101,6 @@ def predict(board):
     quantified = QuantifyBoard(board)
     #return highest_value * model.predict(np.expand_dims(quantified, axis=0), batch_size=1)[0]
     npQuantified = np.array(quantified)
-    prediction = model.predict(npQuantified, batch_size=1)[0]
-    return float(prediction)
+    prediction = model.predict(npQuantified, batch_size=1)
+    print(prediction)
+    return prediction

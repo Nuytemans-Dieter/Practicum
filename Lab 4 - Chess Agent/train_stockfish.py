@@ -19,7 +19,7 @@ def main():
     # Choose the amount of games to be played
     numGames = 1
     # Choose whether or not to gather and save data
-    do_append_data = True
+    do_append_data = False
 
     for gameNumber in range(numGames):
 
