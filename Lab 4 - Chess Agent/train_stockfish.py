@@ -44,14 +44,12 @@ def main():
             if turn_white_player:
                 #start = time.time()
                 value, move = white_player.AlphaBeta(board, 2, -inf, inf, turn_white_player)
-                #move = white_player.random_with_first_level_search(board)
                 #move = black_player.play(board, chess.engine.Limit(time=0.1)).move
                 turn_white_player = False
                 #end = time.time()
             else:
                 #start = time.time()
                 move = black_player.play(board, chess.engine.Limit(time=0.1)).move
-                #move = white_player.random_with_first_level_search(board)
                 turn_white_player = True
                 #end = time.time()
 
@@ -92,7 +90,8 @@ def main():
                 if do_append_data:
                     saveData(boardData, valueData)
 
-            if board.is_stalemate():
+            # If stalemate OR only the kings are left
+            if board.is_stalemate() or getNumPieces( board ) == 2:
                 running = False
                 print("Stalemate")
 
@@ -115,6 +114,23 @@ def saveData(boardData, valueData):
     values.close()
 
     print("All data is now saved!")
+
+
+def getNumPieces( board ):
+    # Count the number of white pieces
+    numPieces  = 2      # There are ALWAYS 2 kings (white + black)
+    numPieces += len(board.pieces( chess.QUEEN,  chess.WHITE))
+    numPieces += len(board.pieces( chess.ROOK,   chess.WHITE))
+    numPieces += len(board.pieces( chess.BISHOP, chess.WHITE))
+    numPieces += len(board.pieces( chess.KNIGHT, chess.WHITE))
+    numPieces += len(board.pieces( chess.PAWN,   chess.WHITE))
+    # Count the number of black pieces
+    numPieces += len(board.pieces( chess.QUEEN,  chess.BLACK))
+    numPieces += len(board.pieces( chess.ROOK,   chess.BLACK))
+    numPieces += len(board.pieces( chess.BISHOP, chess.BLACK))
+    numPieces += len(board.pieces( chess.KNIGHT, chess.BLACK))
+    numPieces += len(board.pieces( chess.PAWN,   chess.BLACK))
+    return numPieces
 
 if __name__ == "__main__":
     main()
