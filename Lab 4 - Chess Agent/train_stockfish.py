@@ -41,29 +41,27 @@ def main():
 
         while running:
 
+            # start = time.time()
             if turn_white_player:
-                #start = time.time()
                 value, move = white_player.AlphaBeta(board, 2, -inf, inf, turn_white_player)
                 #move = black_player.play(board, chess.engine.Limit(time=0.1)).move
                 turn_white_player = False
-                #end = time.time()
             else:
-                #start = time.time()
                 move = black_player.play(board, chess.engine.Limit(time=0.1)).move
                 turn_white_player = True
-                #end = time.time()
+            #end = time.time()
 
             board.push(move)
             #print("This turn took", round((end - start) * 1000, 2), "milliseconds")
-            print(board)
+            #print(board)
 
             # Keep track of the data
             info = engine.analyse(board, chess.engine.Limit(time=0.5))      # Analyse for a specified time period
             boardData.append(QuantifyBoard(board))                          # Add a quantified version of the board to the data
             valueStr = info["score"].white()                                # Get the score for white's perspective
 
-            print("SF:", valueStr)
-            print("ML:", evaluate(board))
+            print("Stockfish:", valueStr)
+            print("Our prediction:", evaluate(board))
 
             value = valueStr.score()                                        # Convert to a score
             if value is None:                                               # If someone is winning in x moves
