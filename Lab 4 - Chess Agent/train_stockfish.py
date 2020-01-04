@@ -39,9 +39,12 @@ def main():
         gameProgress = str(gameNumber+1) + '/' + str(numGames)
         print("Starting game:", gameProgress)
 
-        numZeroValue = 0
+        value = 0               # The previous evaluation
+        numSameValue = 0        # The amount of times the evaluation was equal in a row
 
         while running:
+
+            previousValue = value       # Get the previous value
 
             # start = time.time()
             if turn_white_player:
@@ -74,12 +77,16 @@ def main():
                 offset = int(offset)                                        # Convert the number to an offset
                 value = value - offset                                      # Offset the max value (so that the last move will be the highest value)
 
-            if value == 0:
-                numZeroValue += 1
+            if previousValue == value:                                      # Keep track of the amount of equal evaluations in a row
+                numSameValue += 1
+            else:
+                numSameValue = 0
 
-            if numZeroValue <= 10:
+            if numSameValue <= 5:                                               # Only append data if not too many equal evaluations have been made
                 boardData.append(QuantifyBoard(board))                          # Add a quantified version of the board to the data
                 valueData.append(value)                                         # Add the approximated value data
+            else:
+                print("This state was discarded due to too many equal evaluations")
 
             print("###########################")
 
