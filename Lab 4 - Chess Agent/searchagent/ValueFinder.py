@@ -1,5 +1,6 @@
 import chess
 import searchagent.neural_network as neuralNetwork
+import searchagent.convolutional_neural_network as CNN
 
 maxValue = 999999                   # The max value to be returned from the evaluation function
 pieces = ['q', 'r', 'b', 'n', 'p']  # A list of all chess pieces
@@ -56,10 +57,14 @@ posValue = {
 def evaluate(board):
     #return manualEvaluate(board)
     return MLevaluate(board)
+    #return CNNevaluate(board)
 
 # Use machine learning to evaluate the board
 def MLevaluate(board):
     return neuralNetwork.predict(board)
+
+def CNNevaluate(board):
+    return CNN.predict(board)
 
 # This function uses our own custom made evaluation function
 def manualEvaluate(board):
