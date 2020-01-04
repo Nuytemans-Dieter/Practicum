@@ -66,10 +66,10 @@ def prepare_network():
 
 
     model = keras.Sequential([
-        layers.Dense(256, input_shape=(64,), activation='linear'),
-        layers.Dense(256, activation='elu'),
-        layers.Dense(256, activation='elu'),
-        layers.Dense(256, activation='elu'),
+        layers.Dense(256, input_shape=(64,), activation='selu'),
+        layers.Dense(256, activation='selu'),
+        layers.Dense(256, activation='selu'),
+        layers.Dense(128, activation='selu'),
         layers.Dense(1, activation="linear")
     ])
 
