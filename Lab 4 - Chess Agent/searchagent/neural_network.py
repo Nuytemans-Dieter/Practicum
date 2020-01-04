@@ -66,7 +66,7 @@ def prepare_network():
 
 
     model = keras.Sequential([
-        layers.Dense(256, input_shape=(64,), activation='relu'),
+        layers.Dense(256, input_shape=(64,), activation='linear'),
         layers.Dense(256, activation='linear'),
         layers.Dense(256, activation='linear'),
         layers.Dense(1, activation="linear")
@@ -85,7 +85,7 @@ def prepare_network():
 
     print("Training and testing the model...")
 
-    model.fit(train_boards, train_values, epochs=3)
+    model.fit(train_boards, train_values, epochs=10)
 
     test_loss = model.evaluate(test_boards,  test_values, verbose=2)
     print('\nTest loss (MSE)', test_loss)

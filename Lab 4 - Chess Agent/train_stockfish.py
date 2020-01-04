@@ -17,7 +17,7 @@ def main():
     prepare_network()
 
     # Choose the amount of games to be played
-    numGames = 1
+    numGames = 20
     # Choose whether or not to gather and save data
     do_append_data = True
 
@@ -39,6 +39,8 @@ def main():
         gameProgress = str(gameNumber+1) + '/' + str(numGames)
         print("Starting game:", gameProgress)
 
+        numZeroValue = 0
+
         while running:
 
             # start = time.time()
@@ -57,7 +59,6 @@ def main():
 
             # Keep track of the data
             info = engine.analyse(board, chess.engine.Limit(time=0.5))      # Analyse for a specified time period
-            boardData.append(QuantifyBoard(board))                          # Add a quantified version of the board to the data
             valueStr = info["score"].white()                                # Get the score for white's perspective
 
             print("Stockfish:", valueStr)
@@ -73,7 +74,12 @@ def main():
                 offset = int(offset)                                        # Convert the number to an offset
                 value = value - offset                                      # Offset the max value (so that the last move will be the highest value)
 
-            valueData.append(value)
+            if value == 0:
+                numZeroValue += 1
+
+            if numZeroValue <= 10:
+                boardData.append(QuantifyBoard(board))                          # Add a quantified version of the board to the data
+                valueData.append(value)                                         # Add the approximated value data
 
             print("###########################")
 
@@ -81,9 +87,9 @@ def main():
                 running = False
 
                 if turn_white_player:
-                    print("Stockfish wins!")
+                    print("Stockfish (black player) wins!")
                 else:
-                    print("{} wins!".format(white_player.name))
+                    print("{} (white player) wins!".format(white_player.name))
 
 
             # If stalemate OR only the kings are left
