@@ -53,9 +53,13 @@ def prepare_network():
     #print("Boards:", boards)            # Print the loaded boards
     #print("Values:", values)            # Print the loaded values
 
+    # Reshape a 2D tuple to matrix
+    boards = np.asarray(boards)
+    matBoards = np.reshape(boards, (boards.shape[0], 8, 8))
+
     print("Selecting training and testing data...")
 
-    train_boards, test_boards, train_values, test_values = train_test_split(boards, values, test_size=0.10, shuffle= True)
+    train_boards, test_boards, train_values, test_values = train_test_split(matBoards, values, test_size=0.10, shuffle= True)
     train_boards = np.array(train_boards)
     test_boards = np.array(test_boards)
     train_values = np.array(train_values)
@@ -63,14 +67,13 @@ def prepare_network():
 
     print("Creating neural network...")
 
-
     model = keras.Sequential([
-        layers.Dense(256, input_shape=(64,), activation='selu'),
-        layers.Dense(256, activation='selu'),
-        layers.Dense(256, activation='selu'),
-        layers.Dense(128, activation='selu'),
-        layers.Dense(1, activation="linear")
+        layers.Conv2D(64, kernel_size=3, activation='selu', input_shape=(7283, 8, 8)),
+        layers.Conv2D(32, kernel_size=3, activation='selu'),
+        layers.Flatten(),
+        layers.Dense(1, activation='linear')
     ])
+
 
     print("Compiling the model...")
 
@@ -85,7 +88,7 @@ def prepare_network():
 
     print("Training and testing the model...")
 
-    model.fit(train_boards, train_values, epochs=10)
+    model.fit(matBoards, values, epochs=10)
 
     test_loss = model.evaluate(test_boards,  test_values, verbose=2)
     print('\nTest loss (MSE)', test_loss)
@@ -95,6 +98,6 @@ def prepare_network():
 def predict(board):
     quantified = QuantifyBoard(board)
     #return highest_value * model.predict(np.expand_dims(quantified, axis=0), batch_size=1)[0]
-    npQuantified = np.array(quantified)
+    npQuantified = np.reshape(np.array(quantified), (8, 8))
     prediction = model.predict(npQuantified, batch_size=1)[0]
     return float(prediction)
