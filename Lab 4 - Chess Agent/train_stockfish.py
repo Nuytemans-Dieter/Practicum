@@ -85,6 +85,9 @@ def main():
             if numSameValue <= 5:                                               # Only append data if not too many equal evaluations have been made
                 boardData.append(QuantifyBoard(board))                          # Add a quantified version of the board to the data
                 valueData.append(value)                                         # Add the approximated value data
+            elif numSameValue == 25:                                            # Prevent infinite stuck loops
+                running = False                                                 # Quit running
+                print("This game has been stopped due to being stuck for too long")
             else:
                 print("This state was discarded due to too many equal evaluations")
 
