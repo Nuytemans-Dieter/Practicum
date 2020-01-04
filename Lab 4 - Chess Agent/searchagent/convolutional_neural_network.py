@@ -69,7 +69,9 @@ def prepare_network():
 
     model = keras.Sequential([
         layers.Conv2D(64, kernel_size=3, activation='selu', input_shape=(8, 8, 1)),
-        layers.Conv2D(32, kernel_size=3, activation='selu'),
+        layers.Conv2D(64, kernel_size=3, activation='selu'),    # Kernel operation
+        layers.MaxPooling2D(pool_size=(2, 2)),                  # Convert to (4,4)
+        layers.Conv2D(64, kernel_size=2, activation='selu'),    # Kernel operation
         layers.Flatten(),
         layers.Dense(1, activation='linear')
     ])
@@ -88,7 +90,7 @@ def prepare_network():
 
     print("Training and testing the model...")
 
-    model.fit(matBoards, np.array(values), epochs=10)
+    model.fit(matBoards, np.array(values), epochs=1)
 
     test_loss = model.evaluate(test_boards,  test_values, verbose=2)
     print('\nTest loss (MSE)', test_loss)
@@ -98,6 +100,9 @@ def prepare_network():
 def predict(board):
     quantified = QuantifyBoard(board)
     #return highest_value * model.predict(np.expand_dims(quantified, axis=0), batch_size=1)[0]
-    npQuantified = np.reshape(np.array(quantified), (8, 8))
-    prediction = model.predict(npQuantified, batch_size=1)
-    return float(prediction)
+    quantified = np.array(quantified)
+    quantified = quantified.astype(float)
+    npQuantified = np.reshape(quantified, (8, 8))
+    prediction = model.predict(npQuantified)
+    #print(prediction)
+    return prediction

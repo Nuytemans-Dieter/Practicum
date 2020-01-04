@@ -14,7 +14,7 @@ piece_values = {
     'r': -51,  # Rook   /  Toren
     'b': -33,  # Bishop /  Loper
     'n': -32,  # Knight /  Paard
-    'p': -1,   # Pawn   /  Pion
+    'p': -10,  # Pawn   /  Pion
 }
 
 # This function will return a flattened version of the board and substitute all pieces for numerical values (as strings)
