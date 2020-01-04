@@ -55,7 +55,7 @@ def prepare_network():
 
     # Reshape a 2D tuple to matrix
     boards = np.asarray(boards)
-    matBoards = np.reshape(boards, (boards.shape[0], 8, 8))
+    matBoards = np.reshape(boards, (boards.shape[0], 8, 8, 1))
 
     print("Selecting training and testing data...")
 
@@ -68,7 +68,7 @@ def prepare_network():
     print("Creating neural network...")
 
     model = keras.Sequential([
-        layers.Conv2D(64, kernel_size=3, activation='selu', input_shape=(7283, 8, 8)),
+        layers.Conv2D(64, kernel_size=3, activation='selu', input_shape=(8, 8, 1)),
         layers.Conv2D(32, kernel_size=3, activation='selu'),
         layers.Flatten(),
         layers.Dense(1, activation='linear')
@@ -82,13 +82,13 @@ def prepare_network():
     # For documentation, see https://keras.io/models/model/
     model.compile(optimizer=optimizer,
                   loss='mean_squared_error',
-                  metrics=['mean_squared_error'])
+                  metrics=['mean_absolute_error', 'mean_squared_error'])
 
     model.summary()
 
     print("Training and testing the model...")
 
-    model.fit(matBoards, values, epochs=10)
+    model.fit(matBoards, np.array(values), epochs=10)
 
     test_loss = model.evaluate(test_boards,  test_values, verbose=2)
     print('\nTest loss (MSE)', test_loss)
@@ -99,5 +99,5 @@ def predict(board):
     quantified = QuantifyBoard(board)
     #return highest_value * model.predict(np.expand_dims(quantified, axis=0), batch_size=1)[0]
     npQuantified = np.reshape(np.array(quantified), (8, 8))
-    prediction = model.predict(npQuantified, batch_size=1)[0]
+    prediction = model.predict(npQuantified, batch_size=1)
     return float(prediction)
