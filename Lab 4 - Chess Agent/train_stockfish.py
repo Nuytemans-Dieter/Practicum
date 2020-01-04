@@ -43,8 +43,8 @@ def main():
 
             # start = time.time()
             if turn_white_player:
-                value, move = white_player.AlphaBeta(board, 2, -inf, inf, turn_white_player)
-                #move = black_player.play(board, chess.engine.Limit(time=0.1)).move
+                #value, move = white_player.AlphaBeta(board, 2, -inf, inf, turn_white_player)
+                move = black_player.play(board, chess.engine.Limit(time=0.1)).move
                 turn_white_player = False
             else:
                 move = black_player.play(board, chess.engine.Limit(time=0.1)).move
@@ -85,13 +85,17 @@ def main():
                 else:
                     print("{} wins!".format(white_player.name))
 
-                if do_append_data:
-                    saveData(boardData, valueData)
 
             # If stalemate OR only the kings are left
             if board.is_stalemate() or getNumPieces( board ) == 2:
                 running = False
                 print("Stalemate")
+
+            if not running:
+                if do_append_data:
+                    saveData(boardData, valueData)
+                else:
+                    print("Data is not being saved! (do_append_data == False)")
 
 
 
