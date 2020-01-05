@@ -41,17 +41,6 @@ def prepare_network():
       else:
         values.append(float(stripped))  # Convert to int and add the data to the list
 
-    #print("Normalizing data...")
-    #normValues = []
-    #highest_value = max(values, key=abs)# Get the highest (absolute) number from all values
-    #for val in values:
-    #  percentage = val / highest_value  # Normalize each element
-    #  normValues.append( percentage )   # Add each normalized value to the new list
-
-    #values = normValues                 # Overwrite all values by the normalized list
-
-    #print("Boards:", boards)            # Print the loaded boards
-    #print("Values:", values)            # Print the loaded values
 
     print("Selecting training and testing data...")
 
@@ -64,13 +53,11 @@ def prepare_network():
     print("Creating neural network...")
 
 
-    model = keras.Sequential([
-        layers.Dense(256, input_shape=(64,), activation='selu'),
-        layers.Dense(256, activation='selu'),
-        layers.Dense(256, activation='selu'),
-        layers.Dense(128, activation='selu'),
-        layers.Dense(1, activation="linear")
-    ])
+    model.add(layers.Dense(256, input_shape=(64,), activation='selu'))
+    model.add(layers.Dense(256, activation='selu'))
+    model.add(layers.Dense(256, activation='selu'))
+    model.add(layers.Dense(128, activation='selu'))
+    model.add(layers.Dense(1, activation="linear"))
 
     print("Compiling the model...")
 
@@ -97,5 +84,6 @@ def predict(board):
     #return highest_value * model.predict(np.expand_dims(quantified, axis=0), batch_size=1)[0]
     npQuantified = np.array(quantified)
     npQuantified = npQuantified.astype(float)
-    prediction = model.predict(npQuantified, batch_size=1)[0]
+    npQuantified = np.reshape(npQuantified, (1, 64))
+    prediction = model.predict(npQuantified, batch_size=1)
     return float(prediction)

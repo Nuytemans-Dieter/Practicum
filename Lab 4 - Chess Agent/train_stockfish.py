@@ -10,11 +10,13 @@ from searchagent.search_agent import SearchAgent
 from searchagent.ValueFinder import evaluate
 from searchagent.neural_network_util import QuantifyBoard
 from searchagent.neural_network import prepare_network
+from searchagent.convolutional_neural_network import prepare_network as prepare_CNN
 
 def main():
 
     # Train the neural network
     prepare_network()
+    #prepare_CNN()
 
     # Choose the amount of games to be played
     numGames = 20

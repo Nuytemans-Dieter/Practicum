@@ -1,5 +1,4 @@
 from tensorflow import keras
-# noinspection PyUnresolvedReferences
 from tensorflow.keras import layers, models
 from sklearn.model_selection import train_test_split
 
@@ -41,16 +40,6 @@ def prepare_network():
       else:
         values.append(float(stripped))  # Convert to int and add the data to the list
 
-    #print("Normalizing data...")
-    #normValues = []
-    #highest_value = max(values, key=abs)# Get the highest (absolute) number from all values
-    #for val in values:
-    #  percentage = val / highest_value  # Normalize each element
-    #  normValues.append( percentage )   # Add each normalized value to the new list
-
-    #values = normValues                 # Overwrite all values by the normalized list
-
-    #print("Boards:", boards)            # Print the loaded boards
     #print("Values:", values)            # Print the loaded values
 
     # Reshape a 2D tuple to matrix
@@ -67,14 +56,13 @@ def prepare_network():
 
     print("Creating neural network...")
 
-    model = keras.Sequential([
-        layers.Conv2D(64, kernel_size=3, activation='selu', input_shape=(8, 8, 1)),
-        layers.Conv2D(64, kernel_size=3, activation='selu'),    # Kernel operation
-        layers.MaxPooling2D(pool_size=(2, 2)),                  # Convert to (4,4)
-        layers.Conv2D(64, kernel_size=2, activation='selu'),    # Kernel operation
-        layers.Flatten(),
-        layers.Dense(1, activation='linear')
-    ])
+    model.add(layers.Conv2D(64, kernel_size=3, activation='selu', input_shape=(8, 8, 1)))
+    model.add(layers.Conv2D(64, kernel_size=3, activation='selu'))
+    model.add(layers.MaxPooling2D(pool_size=(2, 2)))
+    model.add(layers.Conv2D(64, kernel_size=2, activation='selu'))
+    model.add(layers.Flatten())
+    model.add(layers.Dense(1, activation='linear'))
+
 
 
     print("Compiling the model...")
@@ -84,13 +72,13 @@ def prepare_network():
     # For documentation, see https://keras.io/models/model/
     model.compile(optimizer=optimizer,
                   loss='mean_squared_error',
-                  metrics=['mean_absolute_error', 'mean_squared_error'])
+                  metrics=['mean_squared_error'])
 
     model.summary()
 
     print("Training and testing the model...")
 
-    model.fit(matBoards, np.array(values), epochs=1)
+    model.fit(matBoards, np.array(values), epochs=10)
 
     test_loss = model.evaluate(test_boards,  test_values, verbose=2)
     print('\nTest loss (MSE)', test_loss)
@@ -100,9 +88,18 @@ def prepare_network():
 def predict(board):
     quantified = QuantifyBoard(board)
     #return highest_value * model.predict(np.expand_dims(quantified, axis=0), batch_size=1)[0]
-    quantified = np.array(quantified)
-    quantified = quantified.astype(float)
-    npQuantified = np.reshape(quantified, (8, 8))
-    prediction = model.predict(npQuantified)
-    #print(prediction)
-    return prediction
+    npQuantified = np.array(quantified)
+    sampleMatrix = [[51, 0, 33, 0, 100, 33, 0, 51],
+                    [10, 10, 10, 0, 0, 10, 10, 10, ],
+                    [0, 0, 32, 0, 0, 32, 0, 0, ],
+                    [0, 0, 0, 88, 10, 0, 0, 0, ],
+                    [0, 0, 0, 0, 0, 0, 0, 0, ],
+                    [0, 0, 0, -10, 0, -32, 0, 0, ],
+                    [-10, -10, -10, 0, 0, -10, -10, -10, ],
+                    [-51, -32, -33, -88, -100, -33, 0, -51, ]]
+    # return highest_value * model.predict(np.expand_dims(quantified, axis=0), batch_size=1)[0]
+    npQuantified = np.array(sampleMatrix)
+    npQuantified = npQuantified.astype(float)
+    npQuantified = np.reshape(npQuantified, (1, 8, 8, 1))
+    prediction = model.predict(npQuantified, batch_size=1)
+    return prediction[0][0]
