@@ -57,9 +57,8 @@ def prepare_network():
     print("Creating neural network...")
 
     model.add(layers.Conv2D(64, kernel_size=3, activation='selu', input_shape=(8, 8, 1)))
-    model.add(layers.Conv2D(64, kernel_size=3, activation='selu'))
-    model.add(layers.MaxPooling2D(pool_size=(2, 2)))
-    model.add(layers.Conv2D(64, kernel_size=2, activation='selu'))
+    model.add(layers.Conv2D(128, kernel_size=3, activation='selu'))
+    model.add(layers.Conv2D(128, kernel_size=2, activation='selu'))
     model.add(layers.Flatten())
     model.add(layers.Dense(1, activation='linear'))
 
