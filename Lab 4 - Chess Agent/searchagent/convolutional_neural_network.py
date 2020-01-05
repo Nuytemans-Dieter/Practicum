@@ -87,18 +87,7 @@ def prepare_network():
 # Predict a value for a given board
 def predict(board):
     quantified = QuantifyBoard(board)
-    #return highest_value * model.predict(np.expand_dims(quantified, axis=0), batch_size=1)[0]
     npQuantified = np.array(quantified)
-    sampleMatrix = [[51, 0, 33, 0, 100, 33, 0, 51],
-                    [10, 10, 10, 0, 0, 10, 10, 10, ],
-                    [0, 0, 32, 0, 0, 32, 0, 0, ],
-                    [0, 0, 0, 88, 10, 0, 0, 0, ],
-                    [0, 0, 0, 0, 0, 0, 0, 0, ],
-                    [0, 0, 0, -10, 0, -32, 0, 0, ],
-                    [-10, -10, -10, 0, 0, -10, -10, -10, ],
-                    [-51, -32, -33, -88, -100, -33, 0, -51, ]]
-    # return highest_value * model.predict(np.expand_dims(quantified, axis=0), batch_size=1)[0]
-    npQuantified = np.array(sampleMatrix)
     npQuantified = npQuantified.astype(float)
     npQuantified = np.reshape(npQuantified, (1, 8, 8, 1))
     prediction = model.predict(npQuantified, batch_size=1)

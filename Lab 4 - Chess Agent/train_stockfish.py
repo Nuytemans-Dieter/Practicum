@@ -16,7 +16,7 @@ def main():
 
     # Train the neural network
     prepare_network()
-    #prepare_CNN()
+    prepare_CNN()
 
     # Choose the amount of games to be played
     numGames = 20
