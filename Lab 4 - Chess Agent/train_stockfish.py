@@ -19,7 +19,10 @@ def main():
     prepare_CNN()
 
     # Choose the amount of games to be played
-    numGames = 20
+    numGames = 4
+    wins = 0
+    gelijk = 0
+    aantalmoves=0
     # Choose whether or not to gather and save data
     do_append_data = True
 
@@ -50,15 +53,17 @@ def main():
 
             # start = time.time()
             if turn_white_player:
-                #value, move = white_player.AlphaBeta(board, 2, -inf, inf, turn_white_player)
-                move = black_player.play(board, chess.engine.Limit(time=0.1)).move
+                value, move = white_player.AlphaBeta(board, 2, -inf, inf, turn_white_player)
+                #move = black_player.play(board, chess.engine.Limit(time=0.1)).move
                 turn_white_player = False
             else:
-                move = black_player.play(board, chess.engine.Limit(time=0.1)).move
+                #move = black_player.play(board, chess.engine.Limit(depth=1)).move
+                move = white_player.random_with_first_level_search(board)
                 turn_white_player = True
             #end = time.time()
 
             board.push(move)
+            aantalmoves+=1
             #print("This turn took", round((end - start) * 1000, 2), "milliseconds")
             #print(board)
 
@@ -102,18 +107,25 @@ def main():
                     print("Stockfish (black player) wins!")
                 else:
                     print("{} (white player) wins!".format(white_player.name))
+                    wins+=1
 
 
             # If stalemate OR only the kings are left
             if board.is_stalemate() or getNumPieces( board ) == 2:
                 running = False
                 print("Stalemate")
+                gelijk+=1
 
             if not running:
                 if do_append_data:
                     saveData(boardData, valueData)
                 else:
                     print("Data is not being saved! (do_append_data == False)")
+    print("aantal games: " + str(numGames))
+    print("Wins: "+ str(wins))
+    print("Losses: " + str(numGames-wins-gelijk))
+    print("gelijk: " + str(gelijk))
+    print("aantalmoves: " + str(aantalmoves/numGames))
 
 
 
