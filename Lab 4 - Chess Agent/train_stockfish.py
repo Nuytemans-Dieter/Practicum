@@ -57,8 +57,8 @@ def main():
                 #move = black_player.play(board, chess.engine.Limit(time=0.1)).move
                 turn_white_player = False
             else:
-                #move = black_player.play(board, chess.engine.Limit(depth=1)).move
-                move = white_player.random_with_first_level_search(board)
+                move = black_player.play(board, chess.engine.Limit(time=0.1,depth=1)).move
+                #move = white_player.random_with_first_level_search(board)
                 turn_white_player = True
             #end = time.time()
 

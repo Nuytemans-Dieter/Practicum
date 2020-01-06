@@ -55,8 +55,8 @@ posValue = {
 
 # Evaluate the board with any of the supported methods
 def evaluate(board):
-    return manualEvaluate(board)
-    #return MLevaluate(board)
+    #return manualEvaluate(board)
+    return MLevaluate(board)
     #return CNNevaluate(board)
 
 # Use machine learning to evaluate the board
