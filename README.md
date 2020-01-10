@@ -17,60 +17,31 @@ Our implementation will perform an alpha-beta search (minimax w/ alpha-beta prun
 Data was gathered by simulating games of Stockfish vs Stockfish. Both agents are using the same settings for a fair match (0.1s search time). After each move, Stockfish does an evaluation (0.5s search time) of the current position. This data is saved after the game. Doing this manually seemed a more interesting challenge than using an existing dataset. Approximately 7000 data pairs were gathered.
 
 ### Results
-None of our implementations was able to beat Stockfish, which was expected. The results against a random agent and a random agent with basic search functions can be found below.
+None of our implementations was able to beat Stockfish, which was expected. The results against a random agent and a random agent with basic search functions can be found below. 20 Games were played against each opponent with each of our implemenation. The leftmost column indicates what the result of the game was, the column `random` contains the results against a pure random opponent. And the rightmost column contains the results against a random opponent that has basic search functionality.  
 
 **Manual evaluation**
 
-Versus a random agent
+| Game result  | Random  | 1<sup>st</sup> level |
+| ------------ | :-----: | :------------------: |
+| Wins         | 19      | 16                   |
+| Draws        | 0       | 1                    |
+| Losses       | 1       | 3                    |
 
-| Game result  | # games |
-| ------------ | ------- |
-| Wins         | 19      |
-| Draws        | 0       |
-| Losses       | 1       |
-
-Versus a random agent with basic search functions
-
-| Game result  | # games |
-| ------------ | ------- |
-| Wins         | 16      |
-| Draws        | 1       |
-| Losses       | 3       |
 
 **Dense neural net**
 
-Versus a random agent
-
-| Game result  | # games |
-| ------------ | ------- |
-| Wins         | 15      |
-| Draws        | 5       |
-| Losses       | 0       |
-
-Versus a random agent with basic search functions
-
-| Game result  | # games |
-| ------------ | ------- |
-| Wins         | 14      |
-| Draws        | 2       |
-| Losses       | 4       |
+| Game result  | Random  | 1<sup>st</sup> level |
+| ------------ | :-----: | :------------------: |
+| Wins         | 15      | 14                   |
+| Draws        | 5       | 2                    |
+| Losses       | 0       | 4                    |
 
 **Convolutional neural net**
 
-Versus a random agent
-
-| Game result  | # games |
-| ------------ | ------- |
-| Wins         | 16      |
-| Draws        | 3       |
-| Losses       | 1       |
-
-Versus a random agent with basic search functions
-
-| Game result  | # games |
-| ------------ | ------- |
-| Wins         | 6       |
-| Draws        | 8       |
-| Losses       | 6       |
+| Game result  | Random  | 1<sup>st</sup> level |
+| ------------ | :-----: | :------------------: |
+| Wins         | 16      | 6                   |
+| Draws        | 3       | 8                    |
+| Losses       | 1       | 6                    |
 
 It is clear that more training data is required. The poor performance of the CNN may have something to do with the lack of normalizing the data before training.
